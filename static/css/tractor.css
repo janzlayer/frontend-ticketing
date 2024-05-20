@@ -1,0 +1,117 @@
+
+.tractor{
+    position: relative;
+    width: 135px;
+    height: 90px;
+
+    animation: moveTractor 25s infinite linear;
+}
+.backseat{
+	width: 10px;
+	height: 50px;
+    position: absolute;
+    top: 0vh;
+    right: 0;
+    left: 80%;
+    background-color: #ec4920;
+	transform: skew(20deg);
+}
+.shadow{
+    position: absolute;
+    top: -5vh;
+    right: 0;
+    left: 12vh;
+	border-bottom: 8vh solid #555;
+	border-right: 8vh solid transparent;
+	height: 1;
+	width: 10;
+    rotate: 20deg;
+    z-index: -1;
+}
+.roof{
+	width: 30px;
+	height: 5px;
+    position: absolute;
+    top: 0vh;
+    right: 0;
+    left: 12vh;
+    background-color: #555;
+}
+.exhaust{
+    position: absolute;
+    top: 4vh;
+    right: 0;
+    left: 1vh;
+	border-bottom: 2vh solid #555;
+	border-left: 1vh solid transparent;
+	border-right: 1vh solid transparent;
+	height: 1vh;
+	width: 5vh;
+    rotate: 270deg;
+    z-index: -1;
+}
+
+.chassis{
+    width: 20vh;
+    height: 4vh;
+    position: absolute;
+    top: 5vh;
+    background-color: #ec4920;
+}
+@keyframes moveTractor {
+    0%{
+        left: 98%;
+        transform: scaleX(1);
+    }
+    49%{
+        left: 2%;
+        transform: scaleX(1);
+    }
+    50%{
+        left: 2%;
+        transform: scaleX(-1);
+    }
+    51%{
+        left:2%;
+        transform: scaleX(-1);
+    }
+
+    99%{
+        left: 98%;
+        transform: scaleX(-1);
+    }
+    100%{
+        left: 98%;
+        transform: scaleX(1);
+    }
+    
+}
+
+img.wheel1{
+    z-index: 2;
+    height: 8.5vh;
+    width: 8.5vh;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    animation: rotateWheel 2s infinite linear;
+}
+img.wheel2{
+    z-index: 2;
+    height: 11vh;
+    width: 11vh;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    animation: rotateWheel 2s infinite linear;
+}
+
+@keyframes rotateWheel {
+    0%{
+       rotate: 359deg;
+    }
+    100%{
+        rotate: 0deg
+    }
+    
+}

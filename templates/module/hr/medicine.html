@@ -1,0 +1,124 @@
+{% extends 'department/hr.html' %}
+
+{% block card %}
+
+<header class="header p-relative d-flex justify-center align-center w-100 bg-kubota-green border-rd-normal"> 
+    <a  href="/hr"  class="d-flex align-center p-absolute left ml-1">
+        <i class="fa-solid fa-arrow-left white font-l "></i>
+    </a>
+    <span class="py-1 font-l bold white">Medicine Reimbursement</span>
+</header>
+
+<div class="d-flex justify-between align-flex-end">
+    <button onclick="createMedicine()" id="create-medicine" class="btn d-flex align-center border-none white cursor-pointer  ml-1 my-1"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Reimbursement</button> 
+    {% if session['user']['p'] != "Supervisor" %}
+    <div id="balance-container" class="d-flex flex-col bg-kubota-green align-center justify-center border-rd-normal white m-1">
+        <span class="font-l">PHP {{ value.data.b }}</span>
+        <span class="font-s">( Available Balance )</span>
+    </div>
+    {%endif%}
+</div>
+
+<div id="table-container" class="mt-1 border-rd-normal h-70 mb-1">
+    <table id="myTable">
+        {% if session['user']['p'] == "Supervisor" %}
+        <thead>
+            <tr>
+                <th style="width: 20%">Reference ID</th>
+                <th style="width: 20%">Reimbursement</th>
+                <th style="width: 30%">Petty Cash Voucher</th>
+                <th style="width: 25%">Form</th>
+                <th style="width: 15%">Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if value.data != None %}
+            {% for i in range(value.data|length) %}
+            {% for ii in range(value.data[i].r|length) %}
+            <tr>
+                <td>{{ value.data[i]._id }}</td>
+                <td>{{ value.data[i].r[ii] }}</td>
+                <td>{{ value.data[i].pcv[ii] }}</td>
+                <td>{{ value.data[i].f[ii] }}</td>
+                <td>{{ value.data[i].rm[ii] }}</td>
+            </tr>
+            {% endfor %}
+            {% endfor %}
+            {% endif %}
+        </tbody>
+        {% else %}
+        <thead>
+            <tr>
+                <th style="width: 20%">Reimbursement</th>
+                <th style="width: 30%">Petty Cash Voucher</th>
+                <th style="width: 30%">Form</th>
+                <th style="width: 20%">Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if value.data.r != None %}
+            {% for i in range(value.data.r|length) %}
+            <tr>
+                <td>{{ value.data.r[i] }}</td>
+                <td>{{ value.data.pcv[i] }}</td>
+                <td>{{ value.data.f[i] }}</td>
+                <td>{{ value.data.rm[i] }}</td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </tbody>
+        {% endif %}
+    </table>
+</div>
+
+<div id="medicine-modal" class="modal">
+    <div class="modal-content">
+        <header class="tab-header">
+            <span class="v-line"></span>
+            <label class="header-text">Medicine</label>
+        </header>
+        <form action="/mdc_update" method="POST">
+            <div class="grid-2-col">
+                <div>
+                    <div class="input-container">
+                        <label>Employee</label>
+                        <input class="input" type="text" value="{{ session['user']['n'] }}" readonly>
+                       
+                    </div>
+                </div>
+                <div>
+                    <div class="input-container">
+                        <label>Date Filed</label>
+                        <input name="datetime" class="input date-file" type="date" readonly>
+                    </div>
+                </div>
+            </div>  
+            <div class="input-container">
+                <label>Reimbursements</label>                 
+               <textarea name="reimbursement" aria-expanded="false"></textarea>     
+            </div>
+            <div class="input-container">            
+               <textarea name="form" aria-expanded="false"></textarea>     
+            </div>  
+                
+           
+            <div class="input-container">
+                <label>Petty Cash Voucher</label>
+                <input name="pcv" class="input" type="text">
+            </div>
+            <div class="input-container">
+                <label>Total</label>
+                <input name="total" class="input" type="number">
+            </div>
+            <div class="input-container">
+                <label>Remarks</label>                 
+               <textarea name="remarks" aria-expanded="false"></textarea>     
+            </div>
+            <br>
+            <div class="btn-holder">
+                <button class="btn" type="submit">Submit</button>
+            </div> 
+        </form>     
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,128 @@
+<script src="/static/js/print.js"></script>
+
+<div id="viewModal" class="modal">
+    <div class="modal-content bg-white">
+    
+        <div class="d-flex justify-end">
+            <button class="border border-rd-normal bg-kubota-green cursor-pointer kubota-card white p-1-half" id="download"><i class="fa-solid fa-download"></i> Download</button>
+        </div>
+      
+        <div id="request-form">
+            <div class="d-flex justify-between">
+                <div class="d-flex flex-col">
+                    <img src="/static/img/kubota_logo.svg" class="w-80">
+                    <span class="font-m dark bold">Kubota Philippines Inc.</span>
+                    <span class="font-s dark bold">232 Quirino Highway, Baesa, Quezon City</span>
+                </div>
+                <div class="d-flex flex-col text-end justify-end">   
+                    <label class="font-l kubota-green bold">In-House Work & Maintenance</label>
+                    <label class="font-m dark bold">Ticket No. <span id="ticket_id" class="font-m dark bold"></span></label>
+                    <label id="view-status" class="font-m bold"></label>
+                </div>
+            </div>
+
+            <div class="w-100">
+                <span class="d-block line mt-2 mb-1"></span>
+
+                <div class="d-flex flex-row justify-evenly w-95 mx-auto">
+                    <div class="d-flex flex-col w-30">
+                        <div class="input-container">
+                            <label class="font-s kubota-green bold">Requester's Name</label>
+                            <label id="view-employee_name" class="font-m dark light" ></label>
+                        </div>
+                        <div class="input-container">
+                            <label class="font-s kubota-green bold">Department</label>
+                            <label id="view-department" class="font-m dark light" ></label>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-col w-30">
+                        <div class="input-container">
+                            <label class="font-s kubota-green bold">Date Filed</label>
+                            <label id="view-date_filed" class="font-m dark light" ></label>
+                        </div>
+                        <div class="input-container">
+                            <label class="font-s kubota-green bold">Maintenance Location</label>
+                            <label id="view-location" class="font-m dark light" ></label>
+                        </div> 
+                    </div>
+                    <div class="d-flex flex-col justify-between w-30">
+                        <div class="input-container">
+                            <label class="font-s kubota-green bold">Work Category</label>
+                            <label id="view-category" class="font-m dark light" ></label>
+                        </div>     
+                        <div class="input-container">
+                            <label class="font-s kubota-green bold">Estimated Budget</label>
+                            <label class="font-m dark light">Php <label id="view-estimated_budget" class="font-m dark light" ></label></label>
+                        </div>                
+                    </div>
+                </div>
+
+                <span class="d-block line mt-2 mb-1"></span>
+
+                <div class="w-95 mx-auto">
+                    <div class="d-flex w-100 justify-center mb-1">
+                        <label class="font-m kubota-green bold mx-auto">Maintenance Order Details</label>
+                    </div>
+                    <div id="imgContainer" class="d-flex justify-center w-55 mx-auto">
+                        <img id="mongoImg" class="w-50" alt="Image from MongoDB">   
+                    </div> 
+                </div>
+
+                <div class="w-100 mt-1">
+                    <div class="input-container ">
+                        <label class="font-s kubota-green bold  ml-1">Work Details</label>
+                        <textarea id="view-work_details" class="border border-rd-normal p-1 font-s dark light" readonly></textarea>
+                    </div>
+                    <div class="input-container ">
+                        <label class="font-s kubota-green bold  ml-1">Materials Needed</label>
+                        <textarea id="view-materials_txt" class="border border-rd-normal p-1 font-s dark light" readonly></textarea>
+                    </div>
+
+                    {% if session['user']['p'] in ['Supervisor', 'Manager'] and session['user']['s'] == 'HR' %}
+                        <div class="input-container">
+                            <label class="font-s kubota-green bold ml-1">Message</label>
+                            <textarea id="message" class="border border-rd-normal p-1 font-s dark light textarea-focus" placeholder="Message to Requester"></textarea>
+                        </div>
+                    {% else %}
+                        <div class="input-container comment">
+                            <label class="font-s kubota-green bold ml-1">Message from Approver</label>
+                            <textarea id="message" class="border border-rd-normal p-1 font-s dark light" readonly></textarea>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex w-100 justify-evenly align-flex-end flex-wrap mt-3">
+                    <div class="approval-container mx-1">
+                        <label>Requested By</label>
+                        <label id="view-rqn" class="mt-2"></label>
+                        <hr>
+                        <label>Employee</label>
+                    </div>
+                    <div class="approval-container mx-1">
+                        <label>Approved By</label>       
+                        <label id="approver_name" class="mt-2"></label>
+                        <hr>
+                        <label id="approver_position"></label>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-center w-80 mx-auto mt-3">
+                    <label class="font-s text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</label>
+                </div>
+            </div>
+        </div>  
+        {% if  session['user']['p'] in ['Supervisor', 'Manager'] and session['user']['s'] == 'HR' %}
+        <div class="d-flex justify-end mt-3">
+            <button id="deny" class="button bg-white border border-rd-normal cursor-pointer pointer">
+                Deny
+            </button>
+            <button id="process" class="button bg-kubota-green border-none border-rd-normal cursor-pointer white kubota-card ml-x3">
+                Process
+            </button>
+            <button id="completed" class="button bg-kubota-green border-none border-rd-normal cursor-pointer white kubota-card ml-x3">
+                Completed
+            </button>
+        </div>
+        {% endif %} 
+    </div>
+</div>

@@ -1,0 +1,81 @@
+{% extends 'department/hr.html' %}
+
+{% block card %}
+<header class="header p-relative d-flex justify-center align-center w-100 bg-kubota-green border-rd-normal"> 
+    <a href="/dashboard" class="d-flex align-center p-absolute left ml-1">
+        <i class="fa-solid fa-arrow-left white font-l "></i>
+    </a>
+    <span class="py-1 font-l bold white">Analytics Report</span>
+</header>
+
+<div class="d-flex align-center justify-between w-100 my-1">
+    <div class="search-holder">
+        <select class="h-100 border-rd-normal border grey font-s filter pointer mr-1" id="table_filter"onchange="statChanged()">
+            <option value="3">Generic</option>
+            <option value="2">By Month</option>
+            <option value="1">By Name</option>
+            <option value="0">By Status</option>
+        </select>
+        
+        <div class="search-input d-flex align-center border border-rd-normal pointer">
+            <input class="ml-1 border-none font-s" type="text" id="filter_value" placeholder="this should be empty ">
+        </div>  
+        <button onclick="generate()" class="d-flex align-center border-none  border-rd-normal bg-kubota-green cursor-pointer white px-1 mr-1">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      
+        <button onclick="y()" class="d-flex align-center border-none  border-rd-normal bg-kubota-green cursor-pointer white px-1 mr-x3">
+            <i id="date-icon" class="fa-solid fa-calendar"></i>
+        </button>
+
+        <div id="datefilter-holder" class="date-filter-holder d-flex align-center bg-1 border-rd-normal">
+            <input id="dstart" class="date border border-rd-normal font-s bg-white mr-x3 grey" type="date">
+            <input id="dend" class="date border border-rd-normal font-s bg-white mr-x3 grey" type="date">
+            <button onclick="z()" class="d-flex align-center justify-center border-none bg-kubota-green filter-icon border-rd-normal cursor-pointer">
+                <i class="fa-solid fa-magnifying-glass white"></i>
+            </button>
+        </div>
+    </div>
+
+  
+</div>
+
+<div id="table-container" class="border-rd-normal bg-1 h-75">
+    <table>
+        <thead>
+            <tr>
+                <th class="white">Car</th>
+                <th class="white">Plate Number</th>
+                <th class="white">Times used in a month</th>
+            </tr>
+        </thead>
+      
+        <tbody id="myTable">
+            <!-- {% for x in value.data |reverse %}
+            <tr id="{{x['_id']}}" class="row-height bg-white">
+                <td class="text-center"onclick="openModal({{x}},{{loop.index}})">
+                    <span class="cursor-pointer hover-underline grey">{{ x['_id'] }}</span>        
+                </td>
+                <td class="text-center">
+                    <span class="grey">{{ x['n'] }}</span>      
+                </td>
+                <td class="text-center">
+                    <span class="grey">{{ x['vu']['b'] }} {{ x['vu'][0] }} {{ x['vu']['ct'] }}</span>      
+                </td>
+                <td class="text-center">
+                    <span class="grey">{{ x['rq']['r'] }}</span>    
+                </td>
+                <td class="text-center">
+                    <span id="depart_time" class="grey">{{ x['io']['t'] }}</span>    
+                </td>
+                <td class="text-center ">
+                    <span id="status-action" class="dark status-indicator mx-auto"> {{ 'Approved' if x['st'] == "1" else 'Denied' if x['st'] == "2" else 'Pending' }}</span>            
+                </td>
+            </tr>
+            {% endfor %} -->
+        </tbody>
+    </table>
+</div>
+
+<script src="{{ url_for('static', filename='js/api/analytics.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,303 @@
+{% extends 'department/hr.html' %}
+
+{% block card %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+<script>
+    var dataList = {{ session['user'] | tojson }}
+    var fetchURL = ["Supervisor", "Manager", "Head Manager"].includes(dataList['p']) ? "/mnt_viewall":"/mnt_view";
+    var fetchFilter = ["Supervisor", "Manager", "Head Manager"].includes(dataList['p']) ? { "s": "HR" }:{ "filter":dataList["_id"], "s": "HR" } 
+    old_val = null;
+    setInterval(function(){
+    $.ajax({
+      url: fetchURL,
+      type: 'POST',
+      dataType: 'json',
+      json: fetchFilter,
+      success: function (data) {
+        if(old_val==null)
+            old_val = data['data'];
+        else
+            for (let i = 0; i < data['data'].length; i++) {
+                if(!_.isEqual(old_val[i], data['data'][i])){
+                    location.reload()
+                    break;
+                }
+            }
+      },
+      error: function (XMLHttpRequest, textStatus, errorThrown) {
+        console.log('error', errorThrown);
+      }
+    });
+  }, 3000);  // check about changes every 3 seconds
+</script>
+
+<header class="header p-relative d-flex justify-center align-center w-100 bg-kubota-green border-rd-normal"> 
+    <a href="/hr" class="d-flex align-center p-absolute left ml-1">
+        <i class="fa-solid fa-arrow-left white font-l "></i>
+    </a>
+    <span class="py-1 font-l bold white">In-House Work & Maintenance</span>
+</header>
+
+<div class="d-flex align-center justify-between w-100 my-1">
+    <div class="search-holder">
+        <button onclick="openModal(null, null)" id="create-vehicle"  class="d-flex align-center border-none border-rd-normal bg-kubota-green cursor-pointer white px-1 mr-1 kubota-card">
+            <i class="fa-solid fa-folder-plus"></i>
+            <label class="ml-1 font-s white cursor-pointer">Create</label>
+        </button>
+
+        {% if session['user']['p'] in ["Manager","Supervisor"] and session['user']['s'] == 'HR' %}
+            <div class="search-input d-flex align-center border border-rd-normal pointer">
+                <input class="ml-1 border-none font-s" type="text" id="name_input" placeholder="Search Name">
+            </div>  
+            <button onclick="nameFilter({{value.data}})" class="d-flex align-center border-none  border-rd-normal bg-kubota-green cursor-pointer white px-1 mr-1 kubota-card">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        {% endif %}
+        <button onclick="showDateFilter()" id="filterCalendar" class="d-flex align-center border-none  border-rd-normal bg-kubota-green cursor-pointer white px-1 mr-x3 kubota-card">
+            <i id="date-icon" class="fa-solid fa-calendar"></i>
+        </button>
+        <div id="datefilter-holder" class="date-filter-holder d-flex align-center bg-1 border-rd-normal">
+            <input id="dstart" class="date border border-rd-normal font-s bg-white mr-x3 grey" type="date">
+            <input id="dend" class="date border border-rd-normal font-s bg-white mr-x3 grey" type="date">
+            <button onclick="dateFilter({{value.data}})" class="d-flex align-center justify-center border-none bg-kubota-green filter-icon border-rd-normal cursor-pointer kubota-card">
+                <i class="fa-solid fa-magnifying-glass white"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="d-flex filter justify-between align-center">
+        <div class="d-flex align-center justify-center bg-kubota-green filter-icon border-rd-normal">
+            <i class="fa-solid fa-filter font-m white"></i>
+        </div>
+        <select class=" border-rd-normal border grey font-s filter pointer" id="table_filter" onchange="statChanged('{{session.user.p in ['Manager','Supervisor'] and session.user.s == 'HR'}}', {{ value.data }})">
+            <option value="3">All</option>
+            <option value="2">Denied</option>
+            <option value="1">Approved</option>
+            <option value="0">Pending</option>
+        </select>
+    </div>
+</div>
+ 
+<div id="table-container" class="border-rd-normal bg-1 h-75">
+    <table>
+        {% if session['user']['p'] in ["Manager","Supervisor"] and  session['user']['s'] == "HR" %}
+        <thead>
+            <tr>
+                <th class="white">Reference ID</th>
+                <th class="white">Requester</th>
+                <th class="white">Location</th>
+                <th class="white">Date Filed</th>
+                <th class="white">Date Completed</th>
+                <th class="white">Status</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            {% for x in value.data | reverse %}
+            <tr id="{{x['_id']}}"  class="row-height bg-white">
+                <td class="text-center cursor-pointer pointer" onclick="openModal({{x}}, {{loop.index}})">
+                    <span class="cursor-pointer hover-underline grey">{{ x['_id'] }}</span>              
+                </td>
+                <td class="text-center ">
+                    <span class="grey">{{ x['n'] }}</span>      
+                </td>
+                <td class="text-center ">
+                    <span class="grey">{{ x['lc'] }}</span>      
+                </td>
+                <td class="text-center ">
+                    <span class="grey">{{ x['rq']['r'] }}</span>    
+                </td>
+             
+                <td class="text-center ">
+                    <span class="grey">{{ x['rq']['a'] if x['st'] == "1" else "--"}}</span>    
+                </td>
+                <td class="text-center ">
+                    <span id="status-action" class="dark status-indicator mx-auto"> {{ 'Completed' if x['st'] == "1" else 'Processing' if x['st'] == "2" else 'Denied' if x['st'] == "3" else 'Pending' }}</span>            
+                </td>
+            </tr>
+        </tbody>
+            {% endfor %}
+        {% else %}
+        <thead>
+            <tr>
+                <th class="white">Reference ID</th>
+                <th class="white">Location</th>
+                <th class="white">Date Filed</th>
+                <th class="white">Date Completed</th>
+                <th class="white">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+             {% for x in value.data | reverse %}
+            <tr id="{{x['_id']}}"  class="row-height bg-white">
+                <td class="text-center cursor-pointer  pointer"  onclick="openModal({{x}},{{loop.index}})">
+                    <span class="cursor-pointer hover-underline grey">{{ x['_id'] }}</span>            
+                </td>
+                <td class="text-center ">
+                    <span class="grey">{{ x['lc'] }}</span>      
+                </td>
+                <td class="text-center ">
+                    <span class="grey">{{ x['rq']['r'] }}</span>    
+                </td>
+                <td class="text-center ">
+                    <span class="grey">{{ x['rq']['a'] if x['st'] == "1" else "--"}}</span>    
+                </td>
+                <td class="text-center ">
+                    <span id="status-action" class="dark status-indicator mx-auto"> {{ 'Completed' if x['st'] == "1" else 'Processing' if x['st'] == "2" else 'Denied' if x['st'] == "3" else 'Pending' }}</span>            
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        {% endif %}
+    </table>
+</div>
+
+<!--- MODAL CREATE -->
+{% include 'modals/hr/mnt/mnt-create.html' %}
+
+<!--- MODAL VIEW -->
+{% include 'modals/hr/mnt/mnt-view.html' %}
+
+<script>
+    function openModal(data, x) {
+        date = document.getElementById('datefiled')
+
+        var downloadBtn = document.getElementById('download')
+        downloadBtn.classList.add('hidden')
+
+        function yyyymmddFormat(inputDate) {
+                const date = new Date(inputDate);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0'); 
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+        
+            document.getElementById("download")
+                    .addEventListener("click", () => {
+                        console.log('sample')
+                        const request_form = document.getElementById("request-form");
+                        console.log(request_form);
+                        const ticketNum = data['_id']
+                        const dateCreated = yyyymmddFormat(data['rq']['r'])
+                        var opt = {
+                            margin: 0,
+                            filename: `${ticketNum}_${dateCreated}.pdf`, // Modified filename string
+                            image: { type: 'jpeg', quality: 0.98 },
+                            html2canvas: { scale: 2 },
+                            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                        };
+                        html2pdf().from(request_form).set(opt).save();
+                    });
+
+        const getSession = {{ session['user'] | tojson }}
+        
+        if(getSession['p'] == 'Supervisor' || getSession == 'Manager'){
+            var denyBtn = document.getElementById('deny');
+            denyBtn.classList.add('hidden');
+            var processBtn = document.getElementById('process');
+            processBtn.classList.add('hidden');
+            var completedBtn = document.getElementById('completed');
+            completedBtn.classList.add('hidden');
+        }
+      
+        document.getElementById('mongoImg').classList.add('hidden');
+        document.getElementById('imgContainer').classList.add('hidden');
+        // Open view modal
+        if (data == null){
+            document.getElementById('work-modal').style.display = 'block';
+        }else{ 
+            document.getElementById('viewModal').style.display = 'block';
+            
+            myDict = {
+                'ticket_id':            data['_id'],
+                'view-employee_name':   data['n'],
+                'view-date_filed':      data['rq']['r'],
+                'view-department':      data['s'],
+                'view-category':        data['wc'],
+                'view-location':        data['lc'],
+                'view-estimated_budget':data['eb'],
+                'view-work_details':    data['dt'],
+                'view-materials_txt':   data['mt'],
+                'message':              data['msg'] == "" ? "": data['msg'],
+                'view-rqn':             data['n'],
+                'view-status':          data['st'] == "0" ? "PENDING" : data['st'] == "1" ? "COMPLETED" : data['st'] == "2" ? "PROCESSING" : "DENIED",
+                'approver_name':        data['ab'] == "0" ? "Pending Reviewer / Approver":  data['ab'][0], 
+                'approver_position':    data['ab'] == "0" ? "Supervisor / Manager":         data['ab'][1]
+            };
+
+            for(var key in myDict)
+                (myDict.hasOwnProperty(key)) ? document.getElementById(key).innerText = myDict[key] : null
+                
+            fetch('/mnt_pic_view',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({"filter":data['_id']})
+            })
+            .then(response =>{
+                if (!response.ok){
+                    throw new Error("Network response was not ok")
+                }
+                return response.json();
+            })
+            .then(data=>{
+                //document.getElementById("mongoImg").src = "data:image/jpeg;base64,"+ data['work_img'];
+                if(data['img'] != null){
+                    document.getElementById('imgContainer').classList.remove('hidden');
+                    document.getElementById('mongoImg').classList.remove('hidden');
+                    document.getElementById("mongoImg").setAttribute("src", "data:image/jpeg;base64,"+ data['img']);
+                    var imgId = data['_id']; // Placeholder for ID
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);z
+                console.log('Error status:', error.status); // Log the status code
+                console.log('Error message:', error.message); // Log the error message
+            });
+
+            const viewStatusList = myDict['view-status']
+            document.querySelectorAll('#view-status').forEach(function(viewStatus){
+                (viewStatusList == 'COMPLETED') ? viewStatus.style.color = '#50C878' : 
+                (viewStatusList == 'DENIED') ? viewStatus.style.color = '#FF8587' :
+                (viewStatusList == 'PRCOESSING') ? viewStatus.style.color = '#FFD700' :  
+                viewStatus.style.color = '#FFD700'
+            });
+
+            document.querySelectorAll('#message').forEach(function(message){
+       
+                if(message.value == ''){
+                    document.querySelectorAll('.comment').forEach(function(comment){
+                        comment.style.display = 'none'
+                    })
+                }
+            });
+            
+            console.log(data['st'])
+            if (getSession['p'] == 'Supervisor' || getSession['p']  == 'Manager'){
+                if(data['st'] == '0'){ 
+                    denyBtn.classList.remove('hidden')
+                    process.classList.remove('hidden')
+                } else if(data['st'] == '1'){
+                    downloadBtn.classList.remove('hidden')
+                } else if(data['st'] == '2'){
+                    completedBtn.classList.remove('hidden')
+                } else if(data['st' == '3']){
+
+                }
+            } else {
+                if(data['st'] == '1'){
+                    downloadBtn.classList.remove('hidden')
+                }
+            }
+        }
+    }
+</script>
+
+<script src="{{ url_for('static', filename='js/filter.js') }}"></script>
+<script src="{{ url_for('static', filename='js/api/maintenance.js') }}"></script>
+<script src="{{ url_for('static', filename='js/close-modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/status-indicator.js') }}"></script>
+
+{% endblock %}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--DECLARATION-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />                 <!--href="{{ url_for('static', filename='') }}"-->
+
+    <!--STYLESHEETS-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tractor.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')  }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/scss.css')    }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/scss-480.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
+        crossorigin="anonymous" 
+        referrerpolicy="no-referrer" /> 
+ 
+    <!--Icon-->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/kubota-icon-32.png') }}">
+
+    <!--Icon STYLESHEETS-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+    <!--JQuery-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+
+    <title>Kubota</title>
+</head>
+<body>
+    <div id="dashboard-container" class="d-flex w-100 h-max p-relative">
+ 
+        <div id="left-container" class="d-flex flex-col align-center bg-white my-1 p-relative b-shadow-1 border-rd-left-normal">
+            <a href="/dashboard" class="bg-kubota-green p-3 w-100 ">
+                <img class="m-2" src="{{ url_for('static', filename='img/kubota-logo-white.svg') }}">
+            </a>
+            <div class="h-content w-95 bg-1 border-rd-normal my-1">
+                <div id="module-container" class="h-100 pt-1">
+
+                    {% include 'component/menu.html' %}    
+
+                </div>                
+            </div>       
+        </div>
+
+        <div onclick="showLeft()" id="left-arrow-holder" class="d-flex justify-center align-center border-none">
+            <i id="arrow-left" class="fa-solid fa-angle-left kubota-green font-l"></i>
+        </div>
+
+        <div id="center-container" class="d-flex p-relative justify-center bg-white w-100 border-rd-normal my-1 b-shadow-1">
+            {% block content %}
+
+                {% include 'component/home.html' %}
+
+            {% endblock %}
+        </div>
+
+        <div onclick="showRight()" id="right-arrow-holder" class="d-flex justify-center align-center border-none">
+            <i id="arrow-right" class="fa-solid fa-angle-right kubota-green font-l"></i>
+        </div>
+
+        <div id="right-container" class="d-flex flex-col align-center bg-white my-1 p-relative b-shadow-1 border-rd-right-normal">
+            <div onclick="showMenu()" class="d-flex align-center w-100 border-rd-normal bg-kubota-green p-relative b-shadow-1 py-1 kubota-card cursor-pointer">
+                <div class="d-flex flex-col align-center justify-center ml-2 my-2 white">
+                    <span id="session_name" name="{{session.user._id}}" class="font-m">{{ session['user']['n'] }}</span>
+                    <span id="session_pos" name="{{session.user.s}}" class="font-s">( {{ session['user']['s'] }} {{session['user']['p'] }}  )</span>
+                </div>
+                <div class="p-absolute right mr-2 cursor-pointer white">
+                    <i id="caret-down" class="fa-solid fa-caret-down font-l"></i>
+                </div>
+            </div>
+            <div class="d-flex justify-center p-relative w-100">
+                <div id="menu-container" class="d-flex flex-col align-center justify-center p-absolute bg-white border-rd-normal w-95 b-shadow-2 mt-1">
+                    
+                    {% include 'component/profile.html' %}
+
+                </div>
+                <div class="h-100 w-95 bg-1 border-rd-normal my-1">
+                    <div id="module-container" class="h-100 pt-1">
+                        
+                        {% include 'component/module.html' %}
+                             
+                    </div>                
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    
+</body>
+</html>

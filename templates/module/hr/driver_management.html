@@ -1,0 +1,83 @@
+{% extends 'department/hr.html' %}
+
+{% block card %}
+<header class="header p-relative d-flex justify-center align-center w-100 bg-kubota-green border-rd-normal"> 
+    <a href="/dashboard" class="d-flex align-center p-absolute left ml-1">
+        <i class="fa-solid fa-arrow-left white font-l "></i>
+    </a>
+    <span class="py-1 font-l bold white">Driver Management</span>
+</header>
+<div class="d-flex align-center justify-between w-100 my-1">
+    <div class="search-holder">
+        <button onclick="addDriver()" id="add-driver" class="d-flex align-center border-none border-rd-normal bg-kubota-green cursor-pointer white px-1 mr-1">
+            <i class="fa-solid fa-users"></i>
+            <label class="ml-1 font-s white cursor-pointer">Create</label>
+        </button>
+
+        {% if session['user']['p'] in ["Manager","Supervisor"] and session['user']['s'] == 'HR' %}
+            <div class="search-input d-flex align-center border border-rd-normal pointer">
+                <input class="ml-1 border-none font-s" type="text" id="name_input" placeholder="Search Driver">
+            </div>  
+            <button onclick="nameFilter({{value.driver}})" class="d-flex align-center border-none  border-rd-normal bg-kubota-green cursor-pointer white px-1 mr-1">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        {% endif %}
+    </div>
+    <!-- COMMENT OUT FOR THE MEANTIME
+    <div class="d-flex filter justify-between align-center">
+        <div class="d-flex align-center justify-center bg-kubota-green filter-icon border-rd-normal">
+            <i class="fa-solid fa-filter font-m white"></i>
+        </div>
+        <select class=" border-rd-normal border grey font-s filter pointer" id="table_filter" onchange="statChanged('{{session.user.p in ['Manager','Supervisor'] and session.user.s == 'HR'}}', {{ value.data }})">
+            <option value="3">All</option>
+            <option value="auto">Automatic</option>
+            <option value="manual">Manual</option>
+        </select>
+    </div> -->
+</div>
+
+<div class="d-flex border-rd-normal bg-1 scroll-y h-75">
+    <div id="card-container" class="d-flex w-100 flex-wrap h-content ">
+        {% for x in value.driver %}
+            <div class="driver-card">
+                <div class="driver-img-holder bg-1 border-rd-normal d-flex justify-center">
+                    <img id="mongoImg" src="data:image/jpeg;base64,{{x['img']}}" class="w-50" alt="Image from MongoDB">   
+                </div>
+                <div class="w-90 mx-auto mt-1">
+                    <div class="d-flex flex-row w-100 mt-1-half">
+                        <span class="font-s kubota-green w-50">Driver's ID:</span>
+                        <span class="font-s grey w-50">{{ x['_id'] }}</span>
+                    </div>
+                    <div class="d-flex flex-row w-100 mt-1-half">
+                        <span class="font-s kubota-green w-50">Driver's Name:</span>
+                        <span class="font-s grey w-50">{{ x['n'] }}</span>
+                    </div>
+                    <div class="d-flex flex-row w-100 mt-1-half">
+                        <span class="font-s kubota-green w-50">Phone Number:</span>
+                        <span class="font-s grey w-50">{{ x['p'] }}</span>
+                    </div>
+                </div>
+            </div>
+            
+        {% endfor %}
+        
+    </div>
+</div>
+ 
+<!--- MODAL CREATE -->
+{% include 'modals/hr/vrf/driver-create.html' %}
+
+<script>
+    function addDriver(){
+        document.getElementById('add-driver-modal').style.display = 'block';
+    }
+
+    document.querySelectorAll('#driver-status').forEach(function(driverStats){
+        (driverStats.innerText == 'Vacant') ? driverStats.classList.add('approved') : driverStats.classList.add('rejected')
+    });
+</script>
+
+<script src="{{ url_for('static', filename='js/api/driver-management.js') }}"></script>
+<script src="{{ url_for('static', filename='js/close-modal.js') }}"></script>
+
+{% endblock %}

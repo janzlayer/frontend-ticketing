@@ -1,0 +1,49 @@
+<a href="/dashboard" class="p-relative module d-flex align-center border-rd-normal bg-white mb-1 b-shadow-1 w-95 mx-auto kubota-green">
+    <span class="hover-line p-absolute h-100 bg-kubota-green"></span>
+    <div class="img-icon-holder ml-2 mr-1">
+        <img src="{{ url_for('static', filename='img/home.png') }}" class="w-inherit">
+    </div>
+    <span class="my-2 dark">Home</span>
+</a>
+{% if session['user']['p'] in ['Supervisor', 'Manager', 'Head Manager'] and session['user']['s'] == "HR" %}
+<a href="/vehicle_inventory" class="p-relative module d-flex align-center border-rd-normal bg-white mb-1 b-shadow-1 w-95 mx-auto kubota-green">
+    <span class="hover-line p-absolute h-100 bg-kubota-green"></span>
+    <div class="img-icon-holder ml-2 mr-1">
+        <img src="{{ url_for('static', filename='img/garage.png') }}" class="w-inherit">
+    </div>
+    <span class="my-2 dark">Vehicle Inventory</span>
+</a>
+<a href="/driver_management" class="p-relative module d-flex align-center border-rd-normal bg-white mb-1 b-shadow-1 w-95 mx-auto kubota-green">
+    <span class="hover-line p-absolute h-100 bg-kubota-green"></span>
+    <div class="img-icon-holder ml-2 mr-1">
+        <img src="{{ url_for('static', filename='img/driver.png') }}" class="w-inherit">
+    </div>
+    <div class="w-60">
+        <span class="my-2 dark">Drivers Management</span>
+    </div>
+</a>
+<a href="/analytics" class="p-relative module d-flex align-center border-rd-normal bg-white mb-1 b-shadow-1 w-95 mx-auto kubota-green">
+    <span class="hover-line p-absolute h-100 bg-kubota-green"></span>
+    <div class="img-icon-holder ml-2 mr-1">
+        <img src="{{ url_for('static', filename='img/analytics.png') }}" class="w-inherit">
+    </div>
+    <span class="my-2 dark">Analytics Report</span>
+</a>
+{% endif %}
+
+{% if session['user']['s'] == "ICT" %}
+<a href="/ICT_inventory" class="p-relative module d-flex align-center border-rd-normal bg-white mb-1 b-shadow-1 w-95 mx-auto kubota-green">
+    <span class="hover-line p-absolute h-100 bg-kubota-green"></span>
+    <i class="fa-solid fa-car m-2 font-l"></i>
+    <span class="my-2 dark">ICT Inventory</span>
+</a>
+<a href="/user_management" class="p-relative module d-flex align-center border-rd-normal bg-white mb-1 b-shadow-1 w-95 mx-auto kubota-green">
+    <span class="hover-line p-absolute h-100 bg-kubota-green"></span>
+    <div class="img-icon-holder ml-2 mr-1 d-flex align-center">
+        <img src="{{ url_for('static', filename='img/user.png') }}" class="w-inherit">
+    </div>
+    <div class="w-60">
+        <span class="my-2 dark">Users Management</span>
+    </div>
+</a>
+{% endif %}

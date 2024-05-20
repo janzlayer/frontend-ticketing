@@ -1,0 +1,66 @@
+<header class="tab-header">
+    <span class="v-line"></span>
+    <label class="header-text">Standard Requisition</label>
+</header>
+<form action="" method="POST">
+    <header>
+        <div class="form-layout">
+            <div class="flex-justify-between">
+                <div class="input-container">
+                    <label>Reference No</label>
+                    <input class="ref" type="text" >
+                </div>
+                <div class="input-container">
+                    <label>Date Filed</label>
+                    <input class="date-file" type="date" readonly>
+                </div>
+            </div>    
+            <div class="input-container">
+                <label>Employee</label>
+                <input class="input" type="text" placeholder="Employee name" >
+            </div>
+        </div>
+    </header>
+    <div class="divider" style="margin: 20px auto; width: 100%"></div>
+    <div class="issuance-container">
+        <div class="equipment-holder">
+            <div class="input-container">
+                <label>Unit</label>
+                <select name="unit" class="unit">
+                    <option value="0">-- Unit --</option>
+                    <option value="1">Laptop</option>
+                    <option value="2">Desktop</option>
+                    <option value="3">Monitor</option>
+                    <option value="4">Printer</option> 
+                    <option value="5">Other</option>
+                </select>
+            </div>
+            <div class="input-container">
+                <label>Model</label>
+                <input class="input" type="text" placeholder="Model">
+            </div>
+            <div class="input-container">
+                <label>Serial Number</label>
+                <input class="input" type="text" placeholder="Serial Number">
+            </div>
+            <div class="input-container">
+                <label>Accessory</label>
+                <select name="accessory" class="accessory">
+                    <option  value="0">-- Accessory --</option>
+                    <option  value="1">Keyboard</option>
+                    <option  value="2">Mouse</option>
+                    <option  value="3">Bag</option>
+                    <option  value="4">Other</option>
+                </select>
+            </div>
+            <div class="input-container">
+                <label>Remarks</label>
+                <textarea placeholder="Remarks ..."></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="btn-holder">
+        <button class="btn" type="submit">Submit</button>
+    </div>  
+</form>
+

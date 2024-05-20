@@ -1,0 +1,153 @@
+<div id="vehicle-modal" class="modal">
+    <div class="modal-content bg-white">
+        <div class="p-relative tab-header bg-kubota-green justify-center border-rd-normal">
+            <span class="header-text white">Vehicle Request</span>
+        </div>
+        <div class="d-flex justify-between w-100">
+            <div class="input-container w-48">
+                <label>Employee</label>
+                <div class="p-1-half border border-rd-normal bg-1">
+                    <input id="employee_name"  name="{{session.user._id}}"  type="text" class="border-none dark" value="{{ session['user']['n'] }}" readonly>
+                </div>
+            </div>   
+            <div class="input-container w-48">
+                <label>Date Filed</label>
+                <div class="p-1-half border border-rd-normal bg-1">
+                    <input id="date_filed" name="date_filed" class="date-file border-none dark" type="text" readonly>
+                </div>   
+            </div>             
+        </div>
+
+        <div class="d-flex justify-between w-100">
+            <div class="input-container w-48">
+                <label>Department</label>
+                <div class="p-1-half border border-rd-normal bg-1">
+                    <input id="department" name="department" type="text" class="border-none dark" value="{{ session['user']['s'] }}" readonly>
+                </div>
+            </div>
+        </div>
+
+        <div id="detailsContainer">
+            <div class="input-container w-100">
+                <label>Purpose / Justification</label>
+                <div class="p-1 border border-rd-normal cursor-pointer pointer">
+                    <textarea id="purpose" name="purpose" class="border-none w-100" aria-expanded="false" placeholder="-- Purpose / Justification --" required></textarea>
+                </div>
+            </div> 
+
+            <div class="d-flex justify-between w-100">
+                <div class="input-container w-30">
+                    <label>Vehicle Type</label>
+                    <div class="p-1-half border border-rd-normal pointer">
+                        <select id="vehicle_type" name="vehicle_type" class="w-100 border-none">
+                            <option value="SUV">SUV</option>
+                            <option value="PICKUP">PICKUP</option>
+                            <option value="VAN">VAN</option>
+                        </select>
+                    </div>   
+                </div>  
+                <div class="input-container w-30">
+                    <label>Transmission Type</label>
+                    <div class="p-1-half border border-rd-normal pointer">
+                        <select id="transmission_type" name="transmission_type" class="w-100 border-none">
+                            <option value="AUTOMATIC">AUTOMATIC</option>
+                            <option vaue="MANUAL">MANUAL</option>
+                        </select>
+                    </div>   
+                </div>
+                <div class="input-container w-30">
+                    <label>With Driver</label>
+                    <div class="p-1-half border border-rd-normal pointer">
+                        <select id="with_driver" name="with_driver" class="w-100 border-none">
+                            <option value="NO">NO</option>
+                            <option value="YES">YES</option>
+                        </select>
+                    </div>   
+                </div>                               
+            </div>
+
+            <div class="d-flex justify-between w-100">  
+                <div class="input-container w-30">
+                    <label>Departure Time</label>
+                    <div class="p-1-half border border-rd-normal pointer">
+                        <input id="departure_time" name="time" class="border-none date-end dark w-100" type="time" required>
+                    </div>   
+                </div>            
+                <div class="input-container w-30">
+                    <label>Departure Date</label>
+                    <div class="p-1-half border border-rd-normal  pointer">
+                        <input id="departure_date" name="date_s" class="border-none date-end dark w-100" type="date" required>
+                    </div>       
+                </div> 
+                <div class="input-container w-30">
+                    <label>Returning Date</label>
+                    <div class="p-1-half border border-rd-normal pointer">
+                        <input id="returning_date" name="date_e" class="border-none date-end dark w-100" type="date" required>
+                    </div>   
+                </div>                       
+            </div>
+
+            <div class="d-flex justify-center w-80 mx-auto mt-3">
+                <label class="font-s text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</label>
+            </div>
+
+            <br>
+            
+            <div class="btn-holder">
+                <button onclick="closeModal()" class="d-flex align-center bg-white border border-rd-normal dark p-1-half cursor-pointer mr-x3 px-2 pointer"></i> Cancel</button>
+                <button class="d-flex align-center btn border-none white p-1-half px-2 cursor-pointer" type="submit" name="insert-data" id="insert-data"><i class="fa-solid fa-download mr-1"></i> Submit</button>
+            </div> 
+        </div>
+    </div>
+</div>
+
+
+<!-- <script>
+    const container = document.getElementById('vehicle-holder');
+
+// Variables for tracking drag state and positions
+let isDragging = false; // Flag to indicate whether dragging is in progress
+let startX; // Initial click position
+let scrollLeft; // Initial scroll position
+
+// Function to handle the `mousedown` event
+const onMouseDown = (e) => {
+    // Start dragging
+    isDragging = true;
+    // Get the initial click position relative to the container
+    startX = e.pageX - container.offsetLeft;
+    // Store the initial scroll position
+    scrollLeft = container.scrollLeft;
+    
+    // Add event listeners for `mousemove`, `mouseup`, and `mouseleave`
+    container.addEventListener('mousemove', onMouseMove);
+    container.addEventListener('mouseup', onMouseUp);
+    container.addEventListener('mouseleave', onMouseUp);
+};
+
+// Function to handle the `mousemove` event during drag
+const onMouseMove = (e) => {
+    if (!isDragging) return; // Exit if not dragging
+    
+    // Calculate current mouse position relative to the container
+    const x = e.pageX - container.offsetLeft;
+    // Calculate how far to scroll (adjust the multiplier for scrolling speed)
+    const walk = (x - startX) * 3;
+    // Update the scroll position
+    container.scrollLeft = scrollLeft - walk;
+};
+
+// Function to handle the `mouseup` event
+const onMouseUp = () => {
+    // Stop dragging
+    isDragging = false;
+    
+    // Remove event listeners for `mousemove`, `mouseup`, and `mouseleave`
+    container.removeEventListener('mousemove', onMouseMove);
+    container.removeEventListener('mouseup', onMouseUp);
+    container.removeEventListener('mouseleave', onMouseUp);
+};
+
+// Attach the `mousedown` event listener to the container
+container.addEventListener('mousedown', onMouseDown);
+    </script> -->

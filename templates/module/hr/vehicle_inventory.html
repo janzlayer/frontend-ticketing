@@ -1,0 +1,166 @@
+{% extends 'department/hr.html' %}
+
+{% block card %}
+<header class="header p-relative d-flex justify-center align-center w-100 bg-kubota-green border-rd-normal"> 
+    <a href="/dashboard" class="d-flex align-center p-absolute left ml-1">
+        <i class="fa-solid fa-arrow-left white font-l "></i>
+    </a>
+    <span class="py-1 font-l bold white">Vehicle Inventory</span>
+</header>
+
+<div class="d-flex align-center justify-between w-100 my-1">
+    <div class="search-holder">
+        <button onclick="addVehicle()" id="add-vehicle" class="d-flex align-center border-none border-rd-normal bg-kubota-green cursor-pointer white px-1 mr-1">
+            <i class="fa-solid fa-car"></i>
+            <label class="ml-1 font-s white cursor-pointer">Create</label>
+        </button>
+
+        {% if session['user']['p'] in ["Manager","Supervisor"] and session['user']['s'] == 'HR' %}
+            <div class="search-input d-flex align-center border border-rd-normal pointer">
+                <input class="ml-1 border-none font-s" type="text" id="name_input" placeholder="Search Vehicle">
+            </div>  
+            <button onclick="nameFilter({{value.data}})" class="d-flex align-center border-none  border-rd-normal bg-kubota-green cursor-pointer white px-1 mr-1">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        {% endif %}
+    </div>
+
+    <div class="d-flex filter justify-between align-center">
+        <div class="d-flex align-center justify-center bg-kubota-green filter-icon border-rd-normal">
+            <i class="fa-solid fa-filter font-m white"></i>
+        </div>
+        <select class=" border-rd-normal border grey font-s filter pointer" id="table_filter" onchange="statChanged('{{session.user.p in ['Manager','Supervisor'] and session.user.s == 'HR'}}', {{ value.data }})">
+            <option value="3">All</option>
+            <option value="0">Vacant</option>
+            <option value="1">Reserved</option>
+        </select>
+    </div>
+</div>
+
+<div class="d-flex border-rd-normal bg-1 scroll-y h-75">
+    <div id="card-container" class="d-flex w-100 flex-wrap h-content ">
+        {% for x in value.inv %}
+            <div class="vehicle-card cursor-pointer" onclick="popUpConfirmation({{x}},'{{ x['_id'] }}')">
+                <div class="vehicle-image-holder d-flex align-flex-end">
+                    <img id="mongoImg" src="data:image/jpeg;base64,{{x['img']}}" class="w-100" alt="Image from MongoDB">   
+                </div>
+                <div class="d-flex flex-col mt-1">
+                    <div class="d-flex align-center">
+                        <span class="font-s kubota-green w-40" >Unit :</span>
+                        <span class="font-m grey bold">{{ x['br'] }} {{ x['m'] }}</span>
+                    </div>
+                    <div class="d-flex align-center">
+                        <span class="font-s kubota-green w-40">Plate No :</span>
+                        <span class="font-s grey">{{ x['_id'] }}</span>
+                    </div>
+                    <div class="d-flex align-center">
+                        <span class="font-s kubota-green w-40">Vehicle Type :</span>
+                        <span class="font-s grey">{{ x['ct'] }}</span>
+                    </div>
+                    <div class="d-flex align-center">
+                        <span class="font-s kubota-green w-40">Transmission :</span>
+                        <span class="font-s grey">{{ x['t'] }}</span>
+                    </div> 
+                    <div class="d-flex align-center">
+                        <span class="font-s kubota-green w-40">Availability :</span>
+                        <span id="vehicle-status" class="font-s grey border-rd-normal">{{ 'Reserved' if x['st'] == "1" else 'Vacant' }}</span>
+                    </div>  
+                          
+                </div>      
+                    
+              
+            </div>
+           
+            
+        {% endfor %}
+        
+        <div id="popUp" class="confirmation-popup modal">
+            <div class="popup-content bg-white d-flex flex-col"> 
+                <div class="popup-img-holder p-relative bg-1 border-rd-normal">
+                    <span id="popStatus" class="grey font-s p-absolute border-rd-normal"></span>
+                    <img id="mongoImgPopup" class="w-100 p-absolute" alt="Image from MongoDB">           
+                </div>
+                
+                <div class="info-holder m-1">
+                    <div>
+                        <div class="d-flex flex-col justify-center">
+                            <span class="kubota-green font-s">Unit:</span>
+                            <span id="popUnit" class="grey font-m"></span>
+                        </div>
+                        <div class="d-flex  flex-col justify-center mt-1">
+                            <span class="kubota-green font-s">Vehicle Type:</span>
+                            <span id="popVehicle" class="grey font-m"></span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="d-flex  flex-col justify-center">
+                            <span class="kubota-green font-s">Plate No:</span>
+                            <span id="popPlatenum" class="grey font-m"></span>
+                        </div>
+                        <div class="d-flex  flex-col justify-center  mt-1">
+                            <span class="kubota-green font-s">Transmission:</span>
+                            <span id="popTranny" class="grey font-m"></span>
+                        </div>
+                    </div>
+                   
+                </div>
+              
+                   
+                  
+               
+                <div id="return-button" class="btn-holder">   
+                    <button id="return" class="text-center btn border-none white p-1-half px-2 cursor-pointer w-100 bold" onclick="vehicleChange()">MARK AS RETURN</button>
+                    <button id="reserve" class="text-center btn border-none white p-1-half px-2 cursor-pointer w-100 bold" onclick="vehicleChange()">MARK AS RESERVED</button>
+                </div> 
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!--- MODAL CREATE -->
+{% include 'modals/hr/vrf/vrf-inv-create.html' %}
+
+<script>
+    function popUpConfirmation(data, x){
+        const returnBtn = document.getElementById('return');
+        returnBtn.classList.add('hidden')
+        const reserveBtn = document.getElementById('reserve');
+        reserveBtn.classList.add('hidden')
+
+        document.getElementById('popUp').style.display = 'flex'
+        document.getElementById("mongoImgPopup").setAttribute("src", "data:image/jpeg;base64,"+ data['img']);
+        document.getElementById('popPlatenum').textContent = data['_id']      
+        document.getElementById('popUnit').textContent = data['br'] + " " + data['m']
+        document.getElementById('popVehicle').textContent = data['ct']
+        document.getElementById('popTranny').textContent = data['t']
+    
+        var myList = data['st'] == "0"? ["Vacant","approved","rejected"]: ["Reserved","rejected","approved"];
+        document.getElementById('popStatus').textContent = myList[0];
+        document.getElementById('popStatus').classList.add(myList[1]);
+        document.getElementById('popStatus').classList.remove(myList[2]);
+    
+           
+
+        if(data['st'] == "1"){
+            document.getElementById('return').classList.remove('hidden');
+        } else {
+            document.getElementById('reserve').classList.remove('hidden');
+        }
+       
+
+    }
+
+    function addVehicle(){
+        document.getElementById('add-vehicle-modal').style.display = 'block';
+    }
+
+    document.querySelectorAll('#vehicle-status').forEach(function(vehicleStats){
+        (vehicleStats.innerText == 'Vacant') ? vehicleStats.classList.add('approved') : vehicleStats.classList.add('rejected')
+    });
+</script>
+
+<script src="{{ url_for('static', filename='js/api/vehicle-inventory.js') }}"></script>
+<script src="{{ url_for('static', filename='js/close-modal.js') }}"></script>
+
+{% endblock %}

@@ -1,0 +1,27 @@
+  <!-- Mobile View -->
+<nav id="mobile-nav" class="d-flex p-fixed w-100 bg-kubota-green b-shadow-1">
+    <div class="d-flex justify-between align-center w-100 p-1">
+        <a href="/dashboard">
+           <img src="/static/img/kubota-logo-white-200.png">
+        </a>
+        <a onclick="showMobileMenu()" id="menu" class="d-flex align-center justify-center border-rd-normal b-shadow-1    ">
+            <i class="fa-solid fa-bars font-l white"></i>
+        </a>
+    </div>
+</nav>
+
+<div id="mobile-menu-container" class="d-flex flex-col p-absolute justify-center align-center w-100 h-30 border-rd-normal bg-white b-shadow-1">
+    <a href="/dashboard" class="menu d-flex flex-row  kubota-green  justify-center align-center cursor-pointer my-2">
+        <i class="fa-solid fa-home font-l mr-2"></i>
+        <span class="font-l">Home</span>
+    </a>
+    <a class="menu d-flex flex-row  kubota-green  justify-center align-center cursor-pointer my-2">
+        <i class="fa-solid fa-user font-l mr-2"></i>
+        <span class="font-l">Profile</span>
+    </a>
+    <a href="/signout" class="menu d-flex flex-row justify-center  align-center kubota-green cursor-pointer my-2">
+        <i class="fa-solid fa-right-from-bracket font-l mr-2"></i>
+        <span class="font-l">Sign out</span>
+    </a>
+</div>
+<!-- End Mobile View -->

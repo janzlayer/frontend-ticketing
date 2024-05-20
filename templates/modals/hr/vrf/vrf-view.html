@@ -1,0 +1,250 @@
+
+
+<div id="viewModal" class="modal">
+    <div class="modal-content bg-white p-relative border">
+        <div class="d-flex justify-end">
+            <button class="border border-rd-normal bg-kubota-green cursor-pointer kubota-card white p-1-half" id="download"><i class="fa-solid fa-download"></i> Download</button>
+        </div>
+        <div id="request-form"> 
+            <div class="d-flex justify-between">
+                <div class="d-flex flex-col">
+                    <img src="/static/img/kubota_logo.svg" class="w-80">
+                    <span class="font-m dark bold">Kubota Philippines Inc.</span>
+                    <span class="font-s dark bold">232 Quirino Highway, Baesa, Quezon City</span>
+                </div>
+            
+                <div class="d-flex flex-col text-end justify-end">   
+                    <label class="font-l kubota-green bold">Vehicle Request</label>
+                    <label class="font-m dark bold">Ticket No. <span id="ticket_number" class="font-m dark bold"></span></label>
+                    <label id="view-status" class="font-m dark bold"></label>
+                </div>
+            </div>
+            
+            <div class="w-100">
+                <span class="d-block line mt-2 mx-1 mb-1"></span>
+                <div class="d-flex flex-row w-95 mx-auto">
+                    <div class="d-flex flex-col w-50">
+                        <div class="input-container">
+                            <label class="font-s kubota-green bold">Requester's Name</label>
+                            <label id="view-requester_name" class="font-m dark light" ></label>
+                        </div>
+                        <div class="input-container">
+                            <label class="font-s kubota-green bold">Requester's Department</label>
+                            <label id="view-requester_department" class="font-m dark light" ></label>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-col w-50">
+                        <div class="input-container">
+                            <label class="font-s kubota-green bold">Date Filed</label>
+                            <label id="view-date_filed" class="font-m dark light" ></label>
+                        </div>
+                        <div class="input-container">
+                            <label class="font-s kubota-green bold">Branch</label>
+                            <label id="view-branch" class="font-m dark light" ></label>
+                        </div> 
+                    </div>
+                </div>
+
+                <span class="d-block line mt-2 mx-1 mb-1"></span>
+                
+                <div class="w-95 mx-auto">
+                    <div class="d-flex w-100 justify-center mb-1">
+                        <label class="font-m kubota-green bold mx-auto">Vehicle Request Details</label>
+                    </div>
+
+                    <div id="vehicle-viewer" class="d-flex w-100 mt-1 justify-between">
+                        <div class="input-container w-30">
+                            <label class="font-s kubota-green bold  ml-1">Vehicle Type</label>
+                            <label id="view-vehicle_type" class="font-m dark light ml-1" ></label>
+                        </div>
+                        <div class="input-container w-30">
+                            <label class="font-s kubota-green bold ml-1">Transmission</label>
+                            <label id="view-transmission_type" class="font-m dark light ml-1" ></label>
+                            
+                        </div>
+                        <div class="input-container w-30">
+                            <label class="font-s kubota-green bold  ml-1">With Driver?</label>
+                            <label id="view-with_driver" class="font-m dark light ml-1" ></label>
+                        </div>
+                    </div>
+                    
+                    <div id="vehicle" class="d-flex w-100 justify-evenly mt-1 ">
+                        <div id="driver" class="driver-info-container">
+                            <div class="driver-img-container">
+                                <img id="mongoDrvImg" class="w-100" alt="driver image">   
+                            </div>
+                            <div class="driver-info mt-1">
+                                <div class="d-flex flex-col">
+                                    <label class="font-s  kubota-green">Driver's Name</label>
+                                    <label id="driver_name" class="font-m"></label>
+                                </div>
+                                <div class="d-flex flex-col">
+                                    <label class="font-s kubota-green">Phone Number</label>
+                                    <label id="driver_phone" class="font-m"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="carImgContainer" class="vehicle-info-container align-center justify-center w-55">             
+                            <img id="mongoImg" class="w-100" alt="vehicle image">    
+                            <div class="d-flex flex-row justify-evenly w-100">
+                                <div class="d-flex flex-col">
+                                    <label class="font-s mr-1 grey">Model:</label>
+                                    <label  id="view-vehicle_unit" name="" class="font-s p-1-half bg-1 border-rd-normal border-bottom"></label>
+                                </div>
+                                <div class="d-flex flex-col">
+                                    <label  class="font-s mr-1 grey">Plate No:</label>
+                                    <label  id="mongoImgId" class="font-s p-1-half bg-1 border-rd-normal border-bottom"></label>
+                                </div>
+                                <div class="d-flex flex-col">
+                                    <label  class="font-s mr-1 grey">Transmission:</label>
+                                    <label  id="approved-transmission_type" class="font-s p-1-half bg-1 border-rd-normal border-bottom"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>      
+                
+                    <div class="d-flex w-100 mt-1 justify-between">
+                        <div class="input-container w-30">
+                            <label class="font-s kubota-green bold  ml-1">Depart Time</label>
+                            <div class="d-flex flex-row  bg-1 border-rd-normal align-center p-1 border-bottom">
+                                <i class="fa-solid fa-clock font-m mr-1"></i>
+                                <label id="view-departure_time" class="font-m dark light"></label>
+                            </div>
+                        </div>
+                        <div class="input-container w-30">
+                            <label class="font-s kubota-green bold ml-1">Depart Date</label>
+                            <div class="d-flex flex-row  bg-1 border-rd-normal align-center p-1 border-bottom">
+                                <i class="fa-solid fa-calendar font-m mr-1"></i>
+                                <label id="view-departure_date" class="font-m dark light bg-1"></label>
+                            </div>
+                            
+                        </div>
+                        <div class="input-container w-30">
+                            <label class="font-s kubota-green bold  ml-1">Return Date</label>
+                            <div class="d-flex flex-row  bg-1 border-rd-normal align-center p-1 border-bottom">
+                                <i class="fa-solid fa-calendar font-m mr-1"></i>
+                                <label id="view-returning_date" class="font-m dark light bg-1"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-100 mt-1">
+                        <div class="input-container ">
+                            <label class="font-s kubota-green bold  ml-1">Purpose / Justification</label>
+                            <textarea id="view-purpose" class="border border-rd-normal p-1 font-s dark light" readonly></textarea>
+                        </div>
+                    </div>
+                    
+                    {% if session['user']['p'] in ['Supervisor', 'Manager'] and session['user']['s'] == 'HR' %}
+
+                        <div id="vehicle-picker" class="vehicle-container mt-2">
+                            {%for x in value.inv %}
+                                {% if x['st'] == '0' %}
+                                <div onclick="imgSelect('{{loop.index}}')" id="vehicle-card{{loop.index}}" class="vehicle-picker-card">
+                                    <div class="vehicle-image-holder d-flex align-flex-end">
+                                        <img id="mongoImg" src="data:image/jpeg;base64,{{x['img']}}" alt="vehicle image">   
+                                    </div>
+                                    <div class="d-flex flex-col mt-1">
+                                        <div class="d-flex align-center">
+                                            <label class="font-s kubota-green w-40" >Unit :</label>
+                                            <label id="vehicle_unit{{loop.index}}" name="vehicle_unit" class="font-m grey bold">{{ x['br'] }} {{ x['m'] }}</label>
+                                        </div>
+                                        <div class="d-flex align-center">
+                                            <label class="font-s kubota-green w-40">Plate No :</label>
+                                            <label id="plate_number{{loop.index}}" name="plate_number" class="font-s grey">{{ x['_id'] }}</label>
+                                        </div>
+                                        <div class="d-flex align-center">
+                                            <label class="font-s kubota-green w-40">Vehicle Type :</label>
+                                            <label id="plate_number{{loop.index}}" name="plate_number" class="font-s grey">{{ x['ct'] }}</label>
+                                        </div>
+                                        <div class="d-flex align-center">
+                                            <label class="font-s kubota-green w-40">Transmission :</label>
+                                            <label id="transmission_type{{loop.index}}" name="transmission_type" class="font-s grey">{{ x['t'] }}</label>
+                                        </div>             
+                                    </div>          
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <div id="drivers-container" class="d-flex w-100">
+                            <div id="driver-picker" class="input-container w-30 mr-2">
+                                <label>Driver:</label>
+                                <div class="p-1-half border border-rd-normal pointer">
+                                    <select id="drivers" name="drivers" class="w-100 border-none">
+                                        {% for x in value.driver %}
+                                            <option value="{{x._id}}">{{x.n}}</option>
+                                        {% endfor%}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="input-container mr-1">
+                                <label>Other:</label>
+                                <div class=" d-flex justify-center align-center">
+                                    <input id="checkboxDriver" type="checkbox">  
+                                </div>                                
+                            </div>
+                            <div id="input-driver" class="w-70 d-flex justify-between">
+                                <div class="d-flex flex-col mt-1 font-s bold w-45">
+                                    <label  class="kubota-green">Driver's Name</label>
+                                    <div class="p-1-half border border-rd-normal pointer">
+                                        <input id="drivers_name" name="drivers_name" type="text" class="border-none dark w-100" placeholder="-- Driver's Name --" required>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-col mt-1 font-s bold w-45">
+                                    <label  class="kubota-green">Driver's Mobile No</label>
+                                    <div class="p-1-half border border-rd-normal pointer">
+                                        <input id="drivers_contact" name="drivers_contact" type="text" class="border-none dark w-100" placeholder="-- Driver's Mobile No --" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+               
+                        <div class="input-container">
+                            <label class="font-s kubota-green bold ml-1">Message</label>
+                            <textarea id="message" class="border border-rd-normal p-1 font-s dark light textarea-focus" placeholder="Message to Requester"></textarea>
+                        </div>
+                    {% else %}
+                        <div class="input-container comment">
+                            <label class="font-s kubota-green bold ml-1">Message from Approver</label>
+                            <textarea id="message" class="border border-rd-normal p-1 font-s dark light" readonly></textarea>
+                        </div>
+                    {% endif %}
+
+                    <div class="d-flex w-100 justify-evenly align-flex-end flex-wrap mt-3">
+                        <div class="approval-container mx-1">
+                            <label>Requested By</label>
+                            <label id="requester_name" class="mt-2"></label>
+                            <hr>
+                            <label>Employee</label>
+                        </div>
+                        <div class="approval-container mx-1">
+                            <label>Approved By</label>       
+                            <label id="approver_name" class="mt-2"></label>
+                            <hr>
+                            <label id="approver_position"></label>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-center w-80 mx-auto mt-3">
+                        <label class="font-s text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</label>
+                    </div>
+                </div>
+            </div>      
+        </div>
+        {% if  session['user']['p'] in ['Supervisor', 'Manager'] and session['user']['s'] == 'HR' %}
+        <div class="d-flex justify-end mt-3">
+            <button id="deny" class="button bg-white border border-rd-normal cursor-pointer pointer">
+                Deny
+            </button>
+            <button id="approve" class="button bg-kubota-green border-none border-rd-normal cursor-pointer white kubota-card ml-x3">
+                Approve
+            </button>
+        </div> 
+        {% endif %} 
+    </div>
+</div>
+
+
+<!-- <script src="{{ url_for('static', filename='js/driver.js')}}"></script> -->
+<script></script>

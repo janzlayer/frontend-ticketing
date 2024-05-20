@@ -1,0 +1,90 @@
+<div id="users-modal" class="modal">
+    <div class="modal-content bg-white">
+        <div class="p-relative tab-header bg-kubota-green justify-center border-rd-normal">
+            <span class="header-text white">Add User</span>
+        </div>
+
+        <div class="d-flex w-100 mt-1 justify-between">
+            <div class="input-container w-30">
+                <label>Employee ID</label>
+                <div class="p-1-half border border-rd-normal pointer">
+                    <input id="employee_id"  name="employee_id"  type="text" class="border-none dark" placeholder="Employee ID">
+                </div>
+            </div>
+            <div class="input-container w-30">
+                <label>Date Hired</label>
+                <div class="p-1-half border border-rd-normal pointer">
+                    <input id="datehired"  name="datehired"  type="text" class="border-none dark" placeholder="Date Hired">
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex w-100 mt-1 justify-between">
+            <div class="input-container w-30">
+               <label>Firstname</label>
+               <div class="p-1-half border border-rd-normal pointer">
+                <input id="firstname"  name="firstname"  type="text" class="border-none dark" placeholder="Firstname">
+            </div>
+            </div>
+            <div class="input-container w-30">
+                <label>Middlename</label>
+                <div class="p-1-half border border-rd-normal pointer">
+                    <input id="middlename"  name="middlename"  type="text" class="border-none dark" placeholder="Middlename">
+                </div>
+            </div>
+            <div class="input-container w-30">
+                <label>Surname</label>
+                <div class="p-1-half border border-rd-normal pointer">
+                    <input id="surname"  name="surname"  type="text" class="border-none dark" placeholder="Surname">
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex w-100 mt-1 justify-between">
+            <div class="input-container w-65">
+                <label>Email Address</label>
+                <div class="p-1-half border border-rd-normal pointer">
+                    <input id="email"  name="email"  type="text" class="border-none dark" placeholder="Email Address">
+                </div>
+            </div>
+            <div class="input-container w-30">
+                <label>Mobile Number</label>
+                <div class="p-1-half border border-rd-normal pointer">
+                    <input id="number"  name="number"  type="text" class="border-none dark" placeholder="Mobile Number">
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex w-100 mt-1 justify-between">
+            <div class="input-container w-30">
+                <label>Department / Section</label>
+                <div class="p-1-half border border-rd-normal pointer">
+                    <input id="department"  name="department"  type="text" class="border-none dark" placeholder="Department / Section">
+                </div>   
+            </div>
+         
+            <div class="input-container w-30">
+                <label>Position</label>
+                <div class="p-1-half border border-rd-normal pointer">
+                    <input id="position"  name="position"  type="text" class="border-none dark" placeholder="position">
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex w-100 mt-1 justify-between">
+            <div class="input-container w-30">
+                <label>Password</label>
+                <div class="p-1-half border border-rd-normal pointer">
+                    <input id="password"  name="password"  type="text" class="border-none dark" placeholder="password">
+                </div>
+            </div>
+        
+        </div>
+        <br>
+        <div class="btn-holder ">
+            <button onclick="closeModal()" class="d-flex align-center bg-white border border-rd-normal dark p-1-half cursor-pointer  px-2 pointer"> Cancel</button>
+            <button class="d-flex align-center btn border-none white p-1-half cursor-pointer ml-x3" type="submit" name="insert-data" id="insert-data"><i class="fa-solid fa-download mr-1"></i> Save</button>
+        </div>        
+       
+    </div>
+</div>

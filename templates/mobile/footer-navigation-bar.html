@@ -1,0 +1,14 @@
+<div id="mobile-footer-nav" class="d-flex justify-evenly align-center p-fixed w-100 bg-white">
+    <a href="/dashboard" class="mobile-mod d-flex flex-col  justify-center align-center kubota-green">
+        <span class="hover-line p-absolute h-100 bg-kubota-green"></span>
+        <i class="fa-solid fa-home font-l"></i>
+        <span class="font-s mt-1-half">Home</span>
+    </a>
+    {% if session['user']['p'] == 'Supervisor' and session['user']['s'] == "HR" %}
+    <a href="/vehicle_inventory" class="mobile-mod d-flex flex-col  justify-center align-center kubota-green">
+        <span class="hover-line p-absolute h-100 bg-kubota-green"></span>
+        <i class="fa-solid fa-car font-l"></i>
+        <span class="font-s mt-1-half">Vehicle</span>
+    </a>
+    {% endif %}
+</div>

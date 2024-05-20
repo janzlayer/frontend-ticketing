@@ -1,0 +1,20 @@
+<!-- Mobile View -->
+<div id="mobile-home"  class="d-flex flex-col w-100 h-100">
+    <div id="mobile-balance-container" class="d-flex flex-col align-center justify-center w-100 h-20 white bg-kubota-green">
+        <span class="font-m">Medical Allowance</span>
+        <div class="d-flex flex-row justify-center align-center">
+            <span class="font-l bold mr-1-half">PHP</span>
+            <span class="font-xl">{{ value.data.b }}</span>
+        </div>
+        <span class="font-s">Available Balance</span>
+    </div>
+    <div id="mobile-home-content" class="d-flex justify-center w-100 h-100 pt-2 border-rd-normal bg-white">
+        {% block mobile %}
+
+            {% include 'mobile/mobile-module.html' %}
+
+        {% endblock %}
+       
+    </div>
+</div>
+<!-- End Mobile View -->

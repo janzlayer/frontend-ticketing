@@ -1,0 +1,35 @@
+{% extends "user-dashboard.html" %}
+
+{% block content %}
+<div id="parent-content" class="p-relative m-1 h-100 w-100">
+
+    {% block card %}
+
+    <header class="header p-relative d-flex justify-center align-center w-100 bg-kubota-green border-rd-normal mx-auto"> 
+        <span class="py-1 font-l bold white">Human Resources / General Admin</span>
+    </header>
+
+    <div class="border-rd-normal bg-1 w-100 mx-auto mt-2">
+        <div id="card-container" class="d-flex justify-evenly m-2">         
+            <a href="/maintenance" id="card" class="d-flex flex-col align-center justify-center bg-kubota-green b-shadow-1 border-rd-normal white mb-2">
+                <img src="{{ url_for('static', filename='img/maintenance.png')}}" class="img-icon">
+                <span>Maintenance Request</span>
+            </a>
+            <a href="/vehicle" id="card" class="d-flex flex-col align-center justify-center bg-kubota-green b-shadow-1 border-rd-normal white mb-2">
+                <img src="{{ url_for('static', filename='img/vehicle.png')}}" class="img-icon">
+                <span>Vehicle Request</span>
+            </a>
+            <a href="/medicine" id="card" class="d-flex flex-col align-center justify-center bg-kubota-green b-shadow-1 border-rd-normal white mb-2">
+                <img src="{{ url_for('static', filename='img/medicine.png')}}" class="img-icon">
+                <p style="text-align: center;" class="font-s">(On Hold)</p>
+                <span class="font-m">Medicine Reimbursement</span>
+           </a> 
+            <a href="/room" id="card" class="d-flex flex-col align-center justify-center bg-kubota-green b-shadow-1 border-rd-normal white">
+                <p style="text-align: center;" class="font-s">(On Hold)</p>
+                <span class="font-m">(TBD)</span>
+            </a>            
+        </div>
+    </div>
+        {% endblock %}
+</div>
+{% endblock %}

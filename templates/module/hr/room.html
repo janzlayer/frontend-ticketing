@@ -1,0 +1,134 @@
+{% extends 'department/hr.html' %}
+
+{% block card %}
+<script src = 
+"https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+
+<script>
+    old_val = null;
+    setInterval(function(){
+    $.ajax({
+      url: '/rmr_view',
+      type: 'POST',
+      dataType: 'json',
+      data: {"filter": "JECC021924-444"},
+      success: function (data) {
+        if(old_val!=null)
+            for (let i = 0; i < data['data'].length; i++) {
+                console.log(old_val[i]);
+                console.log(data['data'][i]);
+                if(_.isEqual(old_val[i], data['data'][i]))
+                    console.log("match")
+                else{
+                    location.reload()
+                    break;
+                }
+            }
+        else{
+            old_val = data['data'];
+        }
+
+      },
+      error: function (XMLHttpRequest, textStatus, errorThrown) {
+        console.log('error', errorThrown);
+      }
+    });
+  }, 5000);  // check about changes every 5 seconds
+</script>
+
+<header class="header p-relative d-flex justify-center align-center w-100 bg-kubota-green border-rd-normal"> 
+    <a href="/hr.html"  class="d-flex align-center p-absolute left ml-1">
+        <i class="fa-solid fa-arrow-left white font-l "></i>
+    </a>
+    <span class="py-1 font-l bold white">Room Reservation</span>
+</header>
+
+<button onclick="createRoom()" id="create-room" class="btn d-flex align-center border-none white cursor-pointer  ml-1 my-1"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Create New</button> 
+
+<div id="table-container" class="mt-1 border-rd-normal h-75 mb-1">
+    <table id="myTable">
+        <thead>
+            <tr>
+                <th style="width: 20%">Reference ID</th>
+                <th style="width: 20%">Room Type</th>
+                <th style="width: 30%">Start</th>
+                <th style="width: 25%">End</th>
+                <th style="width: 15%">Remarks</th>
+                <th style="width: 10%">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for x in value.data%}
+            <tr>
+                <td>{ Ref Id }</td>
+                <td>{{ x['rt'] }}</td>
+                <td>{{ x['io']['e'] }} to {{ x['io']['s'] }}</td>
+                <td>{{ x['io']['s'] }}</td>
+                <td>{{ x['rm'] }}</td>
+                <td>{{ 'Approved' if (x['st'] == "1") else 'Pending' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div id="room-modal" class="modal">
+    <div class="modal-content">
+        <header class="tab-header">
+            <span class="v-line"></span>
+            <label class="header-text">Room Reservation</label>
+        </header>
+        <form action="/rmr_insert" method="POST">
+            <div class="grid-2-col">
+                <div>
+                    <div class="input-container">
+                        <label>Employee</label>
+                        <input class="text-input" type="text" value="{{ session['user']['n'] }}" readonly>
+                    </div>
+                </div>  
+                <div>
+                    <div class="input-container">
+                        <label>Date Filed</label>
+                        <input name="datetime" class="text-input date-file" type="date" readonly>
+                    </div>            
+                </div>
+            </div>
+            <div class="input-container">
+                <label>Rooom type</label>
+                <select name="room-type" class="input">
+                    <option>-- Room --</option>
+                    <option value="Boardroom">Boardroom</option>
+                    <option value="Room 1">Room 1</option>
+                    <option value="Room 2">Room 2</option>
+                    <option value="Room 3">Room 3</option>
+                </select>
+            </div>
+            <div>
+                <label>Reservation Schedule</label>
+                <div class="input-container">
+                    <label>Start date and time</label>
+                    <input name="date_s" class="text-input" type="datetime-local">
+                </div>
+                <div class="input-container">
+                    <label>End date and time</label>
+                    <input name="date_e" class="text-input" type="datetime-local">
+                </div>
+            </div>
+            <div class="input-container">
+                <label>Remarks</label>
+                <textarea aria-expanded="false" name="remarks"></textarea>
+               
+            </div>
+                
+        
+        
+                
+            
+            <div class="btn-holder">
+                <button class="btn" type="submit">Submit</button>
+            </div> 
+        </form>
+        
+    </div>
+</div>
+{% endblock %}

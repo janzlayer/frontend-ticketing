@@ -1,0 +1,69 @@
+<div id="add-vehicle-modal" class="modal">
+    <div class="modal-content bg-white">
+        <div class="p-relative tab-header bg-kubota-green justify-center border-rd-normal">
+            <span class="header-text white">Upload Vehicle</span>
+        </div>
+
+        <div class="w-100 mt-2"> 
+            <div class="d-flex flex-col">
+                <div class="d-flex flex-row w-100 justify-between">
+                    <div class="d-flex flex-col mt-1 font-s bold w-45">
+                        <label class="kubota-green">Vehicle Image <span class="grey">(max: 1MB)</span></label>
+                        <div class="py-1-half">
+                            <input type="file" name="vehicle_img" id="vehicle_img" class="w-100 bg-1 border-rd-normal cursor-pointer" accept="image/*">
+                        </div>
+                    </div>
+                    <div class="d-flex flex-col mt-1 font-s bold w-45">
+                        <label  class="kubota-green">Vehicle Type</label>
+                        <div class="p-1-half border border-rd-normal pointer">
+                            <select id="vehicle_type" name="vehicle_type" class="border-none dark w-100" required>
+                                <option>SUV</option>
+                                <option>VAN</option>
+                                <option>PICKUP</option>
+                            </select>
+                        </div> 
+                    </div>
+                </div>
+                
+                <div class="d-flex flex-row w-100 justify-between">
+                    <div class="d-flex flex-col mt-1 font-s bold w-45">
+                        <label  class="kubota-green">Make</label>
+                        <div class="p-1-half border border-rd-normal pointer">
+                            <input id="vehicle_make" name="vehicle_make" type="text" class="border-none dark w-100" placeholder="-- Make --" required>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-col mt-1 font-s bold w-45">
+                        <label  class="kubota-green">Model</label>
+                        <div class="p-1-half border border-rd-normal pointer">
+                            <input id="vehicle_model" name="vehicle_model" type="text" class="border-none dark w-100" placeholder="-- Model --" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-row w-100 justify-between">
+                    <div class="d-flex flex-col mt-1 font-s bold w-45">
+                        <label class="kubota-green">Plate Number <span class="grey">(Ex. ABC 1234)</span></label>
+                        <div class="p-1-half border border-rd-normal pointer">
+                            <input id="plate_number" name="plate_number" type="text" class="border-none dark w-100" placeholder="-- Plate No --" required>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-col mt-1 font-s bold w-45">
+                        <label  class="kubota-green">Transmission</label>
+                        <div class="p-1-half border border-rd-normal pointer">
+                            <select id="transmission" name="transmission" class="border-none dark w-100" required>
+                                <option>Manual</option>
+                                <option>Automatic</option>
+                            </select>
+                        </div> 
+                    </div>
+                </div> 
+            </div>
+        </div> 
+        <br>
+        <div class="btn-holder ">
+            <button onclick="closeModal()" class="d-flex align-center bg-white border border-rd-normal dark p-1-half cursor-pointer  px-2 pointer"></i> Cancel</button>
+            <button class="d-flex align-center btn border-none white p-1-half cursor-pointer ml-x3" type="submit" name="insert-data" id="insert-data"><i class="fa-solid fa-download mr-1"></i> Save</button>
+        </div>        
+       
+    </div>
+</div>

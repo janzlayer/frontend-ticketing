@@ -1,0 +1,58 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+:root{
+    --dark-color: #444;
+    --darker-color: #333;
+    --darkest-color: #191919;
+
+    --white-color: #fff;
+    
+
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--darker-color);
+    min-height: 100vh;
+}
+
+div.container{
+    position: relative;
+    height: 380px;
+    width: 800px;
+    border-radius: 12px;
+    background-color: var(--dark-color);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    overflow: hidden;
+}
+
+/* div.container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 100%;
+    height: 100%;
+    background: var(--darkest-color);
+    transform: translateX(100%);
+} */
+
+form{
+    min-height: 380px;
+    width: 50%;
+}
+
+form div.signin{
+    display: flex;
+    flex-direction: column;
+}
+div.form-container{
+    display: flex;
+    justify-content: space-around;
+}
+

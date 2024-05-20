@@ -1,0 +1,94 @@
+<div id="work-modal" class="modal">
+    <div class="modal-content bg-white">
+        <div class="p-relative tab-header bg-kubota-green justify-center border-rd-normal">
+            <span class="header-text white">In-House Work & Maintenance</span>
+        </div>
+        <form>
+            <div class="d-flex justify-between w-100">
+                <div class="input-container w-48">
+                    <label>Employee</label>
+                    <div class="p-1-half border border-rd-normal bg-1">
+                        <input id="employee_name"  name="{{session.user._id}}"  type="text" class="border-none dark" value="{{ session['user']['n'] }}" readonly>
+                    </div>
+                </div>   
+                <div class="input-container w-48">
+                    <label>Date Filed</label>
+                    <div class="p-1-half border border-rd-normal bg-1">
+                        <input id="date_filed" name="date_filed" class="date-file border-none dark" type="text" readonly>
+                    </div>   
+                </div>             
+            </div>
+            <div class="d-flex justify-between w-100">
+                <div class="input-container w-48">
+                    <label>Department</label>
+                    <div class="p-1-half border border-rd-normal bg-1">
+                        <input id="department" name="department" type="text" class="border-none dark" value="{{ session['user']['s'] }}" readonly>
+                    </div>
+                </div>   
+                <div class="input-container w-48">
+                    <label>Work Category</label>
+                    <div class="p-1-half border border-rd-normal pointer">
+                        <select id="work_category" name="work_category" type="text" class="border-none dark w-100" placeholder="-- Specific Location --" required>
+                            <option>Repair</option>
+                            <option>Fabricate</option>
+                        </select>
+                    </div>   
+                </div>             
+            </div>
+            <div class="d-flex justify-between w-100">
+                <div class="input-container w-48">
+                    <label>Estimated Budget</label>
+                    <div class="p-1-half border border-rd-normal pointer">
+                        <input id="estimated_budget" name="estimated_budget" type="number" class="border-none dark" placeholder="-- Estimated Budget --" required>
+                    </div>   
+                </div>   
+                <div class="input-container w-48">
+                    <label>Specific Location</label>
+                    <div class="p-1-half border border-rd-normal pointer">
+                        <input id="location" name="location" type="text" class="border-none dark" placeholder="-- Specific Location --" required>
+                    </div>   
+                </div>             
+            </div>
+         
+            <br>
+            <div class="input-container w-100">
+                <label>Detailed Work Instructions</label>
+                <div class="p-1 border border-rd-normal cursor-pointer pointer">
+                    <textarea id="work_details" name="work_details" class="border-none w-100" aria-expanded="false" placeholder="-- Detailed Work Instructions --" required></textarea>
+                </div>
+            </div>
+            <div class="input-container w-100">
+                <label>Upload Image (max: 1MB)</label>
+                <input type="file" name="work_img" id="work_img" class="w-100 bg-1 border-rd-normal cursor-pointer" accept="image/*" onchange="previewImage(event)">     
+                <div id="imagePreview" class="preview-container">
+                    <img id="preview" src="#" alt="Preview">
+                </div>
+            </div>
+            <div class="input-container w-100">
+                <label>Materials Needed</label>
+                <div class="p-1 border border-rd-normal cursor-pointer pointer">
+                    <textarea id="materials_txt" name="materials_txt" class="border-none w-100" aria-expanded="false" placeholder="-- List of Materials needed --" required></textarea>
+                </div>
+            </div>  
+            <br>
+            <div class="btn-holder">
+                <button onclick="closeModal()" class="d-flex align-center bg-white border border-rd-normal dark p-1-half cursor-pointer mr-x3 px-2 pointer"></i> Cancel</button>
+                <button class="d-flex align-center btn border-none white p-1-half px-2 cursor-pointer" type="submit" name="insert-data" id="insert-data"><i class="fa-solid fa-download mr-1"></i> Submit</button>
+            </div> 
+        </form>
+           
+    </div>
+</div> 
+
+<script>
+    document.getElementById('preview').classList.add('hidden')
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var output = document.getElementById('preview');
+            output.src = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+        (reader.readAsDataURL != null) ? document.getElementById('preview').classList.remove('hidden') : document.getElementById('preview').classList.add('hidden')
+    }
+</script> 

@@ -1,0 +1,143 @@
+@media only screen and (max-width: 480px) {
+    body {
+      overflow: auto;
+    }
+
+    #left-container, #right-container, #left-arrow-holder, #right-arrow-holder {
+        display: none;
+    }
+
+
+    #home-container{
+        display:none;
+    }
+
+    #center-container{
+        height: 100%;
+        margin: 0;
+    }
+
+    #center-container div{
+        margin: 0;
+    }
+
+    #center-container header{
+        margin-top: 10vh !important;
+        margin: 0 auto;
+    }
+
+    #center-container .header{
+        border-radius: 0%;
+        margin-top: 8vh !important;
+    
+    }
+
+    #center-container #card-container {
+       margin-top: 2vh !important;
+    }
+
+    #center-container #card-container #card{
+        width: 160px;
+        text-align: center;
+    }
+
+    #center-container header label{
+       font-size: 18px;
+    }
+
+    #balance-container{
+        width: 180px;
+        height: 60px;
+        margin: 10px !important;
+    }
+
+ 
+    #mobile-nav{
+        display: flex;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        height: 8vh;
+    }
+
+    #mobile-footer-nav{
+        border-radius: 6px 6px 0 0;
+        box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+        display: flex;
+        bottom: 0;
+        left: 0;
+        z-index: 10;
+        height: 8vh;
+    }
+
+    #menu{
+        height: 35px;
+        width: 35px;
+        border: 1px solid #eeeded;
+    }
+
+    #mobile-home{
+        padding-top: 8vh;
+        display: flex;
+    }
+
+    #mobile-home-content{
+        box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+        display: flex;
+        position: relative;
+        top: -5px;
+        border-radius: 6px 6px 0 0;
+       
+    }
+
+    #mobile-module{
+        overflow-y: auto;
+        display: flex;
+        flex-wrap: wrap;
+        border-radius: 6px;
+    }
+    .hidden{
+        display: none;
+    }
+    .mobile-module{
+        height: 150px;
+        width: 45%;
+    }
+
+    #mobile-menu-container{
+        top: 8vh;
+        display: none;
+        z-index: 20;
+    }
+
+    #mobile-login-container{
+        display: block !important;
+    }
+
+    #table-container{
+        width: 95%;
+    }
+
+    #myTable{
+        overflow: auto;
+        width: 800px !important;
+    }
+
+    .modal-content{
+        border-radius: 0%;
+        width: 100%;
+        padding: 0;
+        height: 100vh;
+    }
+
+    .modal-content .tab-header{
+        margin-top: 0 !important;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .mobile-mod{
+        width: 70px;
+        height: 60px;
+    }
+  }

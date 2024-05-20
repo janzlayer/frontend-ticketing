@@ -1,0 +1,444 @@
+{% extends 'department/hr.html' %}
+
+{% block card %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+<script>
+    var dataList = {{ session['user'] | tojson }}
+    var fetchURL = ["Supervisor", "Manager", "Head Manager"].includes(dataList['p']) ? "/vrf_viewall" :"/vrf_view";
+    var fetchFilter = ["Supervisor", "Manager", "Head Manager"].includes(dataList['p']) ? { "s": "HR" }:{ "filter":dataList["_id"], "s": "HR" } 
+    old_val = null;
+    setInterval(function(){
+    $.ajax({
+      url: fetchURL,
+      type: 'POST',
+      dataType: 'json',
+      json: fetchFilter,
+      success: function (data) {
+        if(old_val==null)
+            old_val = data['data'];
+        else
+            for (let i = 0; i < data['data'].length; i++) {
+                if(!_.isEqual(old_val[i], data['data'][i])){
+                    location.reload()
+                    break;
+                }
+            }
+      },
+      error: function (XMLHttpRequest, textStatus, errorThrown) {
+        console.log('error', errorThrown);
+      }
+    });
+  }, 3000);  // check about changes every 3 seconds
+
+</script>
+
+<header class="header p-relative d-flex justify-center align-center w-100 bg-kubota-green border-rd-normal"> 
+    <a href="/hr" class="d-flex align-center p-absolute left ml-1">
+        <i class="fa-solid fa-arrow-left white font-l "></i>
+    </a>
+    <span class="py-1 font-l bold white">Vehicle Request</span>
+</header>
+
+
+<div class="d-flex align-center justify-between w-100 my-1">
+    <div class="search-holder">
+        <button onclick="openModal(null, null)" id="create-vehicle"  class="d-flex align-center border-none border-rd-normal bg-kubota-green cursor-pointer white px-1 mr-1">
+            <i class="fa-solid fa-folder-plus"></i>
+            <label class="ml-1 font-s white cursor-pointer">Create</label>
+        </button>
+
+        {% if session['user']['p'] in ["Manager","Supervisor"] and session['user']['s'] == 'HR' %}
+            <div class="search-input d-flex align-center border border-rd-normal pointer">
+                <input class="ml-1 border-none font-s" type="text" id="name_input" placeholder="Search Name">
+            </div>  
+            <button onclick="nameFilter({{value.data}})" class="d-flex align-center border-none  border-rd-normal bg-kubota-green cursor-pointer white px-1 mr-1">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        {% endif %}
+
+        <button onclick="showDateFilter()" id="filterCalendar" class="d-flex align-center border-none  border-rd-normal bg-kubota-green cursor-pointer white px-1 mr-x3">
+            <i id="date-icon" class="fa-solid fa-calendar"></i>
+        </button>
+
+        <div id="datefilter-holder" class="date-filter-holder d-flex align-center bg-1 border-rd-normal">
+            <input id="dstart" class="date border border-rd-normal font-s bg-white mr-x3 grey" type="date">
+            <input id="dend" class="date border border-rd-normal font-s bg-white mr-x3 grey" type="date">
+            <button onclick="dateFilter({{value.data}})" class="d-flex align-center justify-center border-none bg-kubota-green filter-icon border-rd-normal cursor-pointer">
+                <i class="fa-solid fa-magnifying-glass white"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="d-flex filter justify-between align-center">
+        <div class="d-flex align-center justify-center bg-kubota-green filter-icon border-rd-normal">
+            <i class="fa-solid fa-filter font-m white"></i>
+        </div>
+        <select class=" border-rd-normal border grey font-s filter pointer" id="table_filter" onchange="statChanged('{{session.user.p in ['Manager','Supervisor'] and session.user.s == 'HR'}}', {{ value.data }})">
+            <option value="3">All</option>
+            <option value="2">Denied</option>
+            <option value="1">Approved</option>
+            <option value="0">Pending</option>
+        </select>
+    </div>
+</div>
+
+    
+<div id="table-container" class="border-rd-normal bg-1 h-75">
+    <table>
+        {% if session['user']['p'] in ["Manager","Supervisor"] and session['user']['s'] == 'HR' %}
+        <thead>
+            <tr>
+                <th class="white">Reference ID</th>
+                <th class="white">Requester Name</th>
+                <th class="white">Requested Vehicle</th>
+                <th class="white">Date Filed</th>
+                <th class="white">Depart Time</th>
+                <th class="white">Date Approved</th>
+                <th class="white">Status</th>
+            </tr>
+        </thead>
+      
+        <tbody id="myTable">
+            {% for x in value.data |reverse %}
+            <tr id="{{x['_id']}}" class="row-height bg-white">
+                <td class="text-center cursor-pointer pointer"onclick="openModal({{x}},{{loop.index}})">
+                    <span class="cursor-pointer hover-underline grey">{{ x['_id'] }}</span>        
+                </td>
+                <td class="text-center">
+                    <span class="grey">{{ x['n'] }}</span>      
+                </td>
+                <td class="text-center">
+                    <span class="grey">{{ x['vu']['b'] }} {{ x['vu'][0] }} {{ x['vu']['ct'] }}</span>      
+                </td>
+                <td class="text-center">
+                    <span class="grey">{{ x['rq']['r'] }}</span>    
+                </td>
+                <td class="text-center">
+                    <span id="depart_time" class="grey">{{ x['io']['t'] }}</span>    
+                </td>
+                <td class="text-center ">
+                    <span class="grey">{{ x['rq']['a'] if x['st'] == "1" else "--"}}</span>    
+                </td>
+                <td class="text-center ">
+                    <span id="status-action" class="dark status-indicator mx-auto"> {{ 'Approved' if x['st'] == "1" else 'Denied' if x['st'] == "2" else 'Pending' }}</span>            
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        {% else %}
+        <thead>
+            <tr>
+                <th class="white">Reference ID</th>
+                <th class="white">Requested Vehicle</th>
+                <th class="white">Date Filed</th>
+                <th class="white">Depart Time</th>
+                <th class="white">Status</th>
+            </tr>
+        </thead>
+        <tbody id="myTable">
+                {% for x in value.data |reverse %}
+                <tr id="{{x['_id']}}" class="row-height bg-white">
+                    <td class="text-center cursor-pointer pointer"onclick="openModal({{x}} ,{{loop.index}})" >
+                        <span class="cursor-pointer hover-underline grey">{{ x['_id']}}</span>    
+                    </td>
+                    <td class="text-center">
+                        <span class="grey">{{ x['vu']['b'] }} {{ x['vu'][0] }} {{ x['vu']['ct'] }}</span>     
+                    </td>
+                    <td class="text-center">
+                        <span class="grey">{{ x['rq']['r'] }}</span>    
+                    </td>
+                    <td class="text-center">
+                        <span id="depart_time" class="grey">{{ x['io']['t'] }}</span>      
+                    </td>
+                    <td class="text-center">
+                        <span id="status-action" class="dark status-indicator mx-auto">{{ 'Approved' if x['st'] == "1" else 'Denied' if x['st'] == "2" else 'Pending' }}</span>            
+                    </td>
+                </tr>
+                {% endfor %} 
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<!--- MODAL CREATE -->
+{% include 'modals/hr/vrf/vrf-create.html' %}
+
+<!--- MODAL VIEW -->
+{% include 'modals/hr/vrf/vrf-view.html' %}
+
+<script>
+    function convertTo12HourFormat(time24) {
+    const [hours, minutes] = time24.split(':');
+
+    let hoursNumber = parseInt(hours);
+    const amPm = hoursNumber >= 12 ? 'PM' : 'AM';
+
+    if (hoursNumber > 12) {
+        hoursNumber -= 12;
+    } else if (hoursNumber === 0) {
+        hoursNumber = 12;
+    }
+    return `${hoursNumber}:${minutes} ${amPm}`;
+}
+
+    document.querySelectorAll('#depart_time').forEach(function(departTime){
+        departTime.textContent = convertTo12HourFormat(departTime.textContent)
+    });
+        
+    var carSelected = [];
+    function openModal(data, x) {
+        const downloadButton = document.getElementById('download');
+        downloadButton.classList.add('hidden');
+        const vehicle = document.getElementById('vehicle');
+        vehicle.classList.add('hidden');
+        var driver = document.getElementById('driver');
+        driver.classList.add('hidden');
+        const vehicleViewer = document.getElementById('vehicle-viewer');
+        vehicleViewer.classList.add('hidden');
+
+        function yyyymmddFormat(inputDate) {
+                const date = new Date(inputDate);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0'); 
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+          
+                document.getElementById("download")
+                    .addEventListener("click", () => {
+                        console.log('sample')
+                        const request_form = document.getElementById("request-form");
+                        console.log(request_form);
+                        const ticketNum = data['_id']
+                        const dateCreated = yyyymmddFormat(data['rq']['r'])
+                        var opt = {
+                            margin: 0,
+                            filename: `${ticketNum}_${dateCreated}.pdf`, // Modified filename string
+                            image: { type: 'jpeg', quality: 0.98 },
+                            html2canvas: { scale: 2 },
+                            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                        };
+                        html2pdf().from(request_form).set(opt).save();
+                    });
+            
+
+        // Open view modal
+        if (data == null){
+            document.getElementById('vehicle-modal').style.display = 'block';
+        }else{ 
+            document.getElementById('viewModal').style.display = 'block';
+    
+            myDict = {
+                'ticket_number':              data['_id'],
+                'view-status':                data['st'] == "0" ? "PENDING" : data['st'] == "1" ? "APPROVED": "DENIED",
+                'view-requester_name':        data['n'],
+                'view-requester_department':  data['s'],
+                'view-date_filed':            data['rq']['r'],
+                'view-branch':                "Baesa",
+                'view-vehicle_type':          data['vu']['ct'],
+                'view-transmission_type':     data['vu']['tt'],
+                'view-with_driver':           data['wd'],
+                'view-departure_time':        convertTo12HourFormat(data['io']['t']),
+                'view-departure_date':        data['io']['s'],
+                'view-returning_date':        data['io']['e'],
+                'message':                    data['msg'] == "" ? "": data['msg'],
+                'view-purpose':               data['rm'],
+                'requester_name':             data['n'],
+                'approver_name':              data['ab'] == "0" ? "Pending Reviewer / Approver" : data['ab'][0], 
+                'approver_position':          data['ab'] == "0" ? "Supervisor / Manager" : data['ab'][1]
+            }
+        
+            for(var key in myDict)
+                (myDict.hasOwnProperty(key)) ? document.getElementById(key).textContent = myDict[key] : null
+            if(data['vu'].hasOwnProperty("pn")){
+                var filter = {}
+                
+                if(typeof data['dvr'] == 'object'){
+                    document.getElementById("mongoDrvImg").setAttribute("src", "{{ url_for('static', filename='img/default-driver-picture.PNG')}}");
+                    document.getElementById("driver_name").innerText = data['dvr']['n'];
+                    document.getElementById("driver_phone").innerText = data['dvr']['p'];
+                    filter = {"filter": data['vu']['pn']}
+                }else{ 
+                    if(data['dvr'] != ""){
+                        filter = {"filter": data['vu']['pn'], "dvr":data['dvr']}
+                    }else{
+                        filter = {"filter": data['vu']['pn']}
+                    }
+                }
+                fetch('/vrf_pic_view',{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(filter)
+                })
+                .then(response =>{
+                    if (!response.ok){
+                        throw new Error("Network response was not ok")
+                    }
+                    return response.json();
+                })
+                .then(data=>{
+                    console.log(data);
+                    
+                    if('driver' in data && data['driver'].hasOwnProperty("img")){
+                        console.log(data);
+                        driver = data['driver']
+                        document.getElementById("driver_name").innerText = driver['n'];
+                        document.getElementById("driver_phone").innerText = driver['p'];
+                        document.getElementById("mongoDrvImg").setAttribute("src", "data:image/jpeg;base64,"+ driver['img']);
+                    }
+
+                    data = data['data']
+                    document.getElementById("mongoImg").setAttribute("src", "data:image/jpeg;base64,"+ data['img']);
+                    document.getElementById("mongoImgId").innerText = data['_id'];
+                    document.getElementById("view-vehicle_unit").innerText = data['br'] + " " + data['m'];
+                    document.getElementById("approved-transmission_type").innerText = data['t'];
+                    console.log(driver);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    console.log('Error status:', error.status); // Log the status code
+                    console.log('Error message:', error.message); // Log the error message
+                });
+            }
+
+            const viewStatusList = myDict['view-status']
+            document.querySelectorAll('#view-status').forEach(function(viewStatus){
+                (viewStatusList == 'APPROVED') ? viewStatus.style.color = '#50C878' : 
+                (viewStatusList == 'DENIED') ? viewStatus.style.color = '#FF8587' : 
+                viewStatus.style.color = '#FFD700'
+            });
+
+            document.querySelectorAll('#message').forEach(function(message){
+                if(message.value == ''){
+                    document.querySelectorAll('.comment').forEach(function(comment){
+                        comment.style.display = 'none'
+                    })
+                }
+            }); 
+
+
+ 
+          
+            const getSession = {{ session['user'] | tojson }}
+            if(getSession['p'] == 'Supervisor' || getSession['p'] == 'Manager'){
+                document.getElementById('approve').addEventListener('click', updater);
+                document.getElementById('deny').addEventListener('click', updater);
+                
+                document.getElementById('input-driver').classList.add('hidden')
+                
+
+                const driverPicker = document.getElementById('driver-picker');
+                driverPicker.classList.add('hidden');
+                const drivers = document.getElementById('drivers-container');
+                drivers.classList.add('hidden');
+                const approvedButton = document.getElementById('approve')
+                approvedButton.classList.add('hidden');
+                const deniedButton = document.getElementById('deny')
+                deniedButton.classList.add('hidden');
+                const vehiclePicker = document.getElementById('vehicle-picker');
+                vehiclePicker.classList.add('hidden');
+
+                
+                function isChecked(){
+                    if(document.getElementById('checkboxDriver').checked){
+                        document.getElementById('input-driver').classList.remove('hidden')
+                        driverPicker.classList.add('hidden');
+                    } else {
+                        document.getElementById('input-driver').classList.add('hidden')
+                        driverPicker.classList.remove('hidden');
+                    }
+                
+                }
+                document.getElementById('checkboxDriver').addEventListener('change', isChecked);
+                
+                // PENDING REQUEST
+                if(data['st'] == '0'){
+                   
+                    vehiclePicker.classList.remove('hidden')
+                    vehicleViewer.classList.remove('hidden')
+                 
+                    approvedButton.classList.remove('hidden')
+                    deniedButton.classList.remove('hidden')
+                    if(data['wd'] == 'YES'){
+                        driverPicker.classList.remove('hidden')
+                        drivers.classList.remove('hidden')
+                    } else if(data['wd'] == 'NO'){
+                        driverPicker.classList.add('hidden')
+                    }
+                } 
+                // APPROVED REQUEST 
+                else if(data['st'] == '1'){
+                    downloadButton.classList.remove('hidden')
+                    vehicle.classList.remove('hidden')
+                    if(data['wd'] == 'YES'){
+                        driver.classList.remove('hidden')
+                    } else if(data['wd'] == 'NO'){
+                        driver.classList.add('hidden')
+                    }
+                } 
+                // DENIED REQUEST
+                else if(data['st'] == '2'){
+                    vehicleViewer.classList.remove('hidden')
+                }
+
+            } else {
+                if(data['st'] == '0'){
+                    vehicleViewer.classList.remove('hidden')
+                } 
+                // APPROVED REQUEST
+                else if(data['st'] == '1'){
+                    // vehicleViewer.classList.add('hidden')
+                    vehicle.classList.remove('hidden')
+                    downloadButton.classList.remove('hidden')
+                    if(data['wd'] == 'YES'){
+                        driver.classList.remove('hidden')
+                    } else if(data['wd'] == 'NO'){
+                        driver.classList.add('hidden')
+                    }
+                } 
+                // DENIED REQUEST
+                else if(data['st'] == '2'){
+                    vehicleViewer.classList.remove('hidden')
+                }
+            }
+        }
+    }
+
+    let selectedContainer = null;
+
+    function imgSelect(index){
+        console.log('clicked' + index)
+        carSelected = [
+                [
+                'vehicle_unit',
+                'plate_number',
+                'transmission_type'
+                ],
+                [
+                document.getElementById('vehicle_unit'+index).textContent,
+                document.getElementById('plate_number'+index).textContent,
+                document.getElementById('transmission_type'+index).textContent
+                ]
+            ]
+          
+            const container = document.getElementById('vehicle-card' + index);
+        
+            (selectedContainer) ?  selectedContainer.style.border = 'none' : null
+           
+        container.style.border = "1px solid black"
+        document.getElementById('detailsContainer').classList.remove('d-none')
+        selectedContainer = container;
+    }
+
+  
+</script>
+
+<script src="{{ url_for('static', filename='js/filter.js') }}"></script>
+<script src="{{ url_for('static', filename='js/api/vehicle.js') }}"></script>
+<script src="{{ url_for('static', filename='js/status-indicator.js') }}"></script>
+<script src="{{ url_for('static', filename='js/close-modal.js') }}"> </script>
+
+{% endblock %}

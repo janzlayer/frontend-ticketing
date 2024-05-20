@@ -1,0 +1,72 @@
+<div id="mobile-login-container" class="d-flex flex-col justify-center w-95 b-shadow-1 p-relative border-rd-normal bg-white">
+    <div id="login-user" class="p-relative border-rd-normal f-right">                 
+        <div class="w-10 h-100">
+            <header class="d-flex mt-3 mx-3">
+                <span id="header-line" class="bg-kubota-green border-rd-normal mr-1"></span>                                                                                                                               
+                <label class="font-l kubota-green bold">User</label>
+            </header>
+            <form action="/login" name="login" method="POST">
+                <div class="p-3">
+                    <div class="d-flex flex-col">
+                        <div class="d-flex align-center">
+                            <div class="icon d-flex align-center justify-center mr-1">
+                                <i class="fa-solid fa-envelope kubota-green  font-l"></i>
+                            </div>
+                            <input class="px-1 w-100 border-none border-bottom focus" type="text" name="email" placeholder="Email Address">
+                        </div> 
+                    </div>
+                    <br>
+                    <div class="d-flex flex-col">
+                        <div class="d-flex align-center">
+                            <div class="icon d-flex align-center justify-center mr-1">
+                                <i class="fa-solid fa-lock kubota-green  font-l"></i>
+                            </div>
+                            <input class="px-1  w-100 border-none border-bottom focus" type="password"  name="password" placeholder="Password">
+                        </div> 
+                    </div>
+                    <br>
+                    <div class="btn-holder">
+                        <button class="btn" type="submit">Login</button>
+                    </div>    
+                </div>
+            </form>
+        </div>                           
+    </div>
+
+    <div id="login-admin" class="p-relative border-rd-normal f-left">
+        <div class="w-100 h-100">
+            <header class="d-flex mt-3 mx-3">
+                <span id="header-line" class="bg-kubota-green border-rd-normal mr-1"></span>                                                                                                                               
+                <label class="font-l kubota-green bold">Super User</label>
+            </header>
+            <form  action="" name="login" method="POST">
+                <div class="p-3">                                          
+                    <div class="d-flex flex-col">
+                        <div class="d-flex align-center">
+                            <div class="icon d-flex align-center justify-center mr-1">
+                                <i class="fa-solid fa-envelope kubota-green  font-l"></i>
+                            </div>
+                            <input class="px-1 w-100 border-none border-bottom focus" type="text" name="email" placeholder="Email Address">
+                        </div> 
+                    </div>
+                    <br>
+                    <div class="d-flex flex-col">
+                        <div class="d-flex align-center">
+                            <div class="icon d-flex align-center justify-center mr-1">
+                                <i class="fa-solid fa-lock kubota-green  font-l"></i>
+                            </div>
+                            <input class="px-1  w-100 border-none border-bottom focus" type="password"  name="password" placeholder="Password">
+                        </div> 
+                    </div>
+                    <br>
+                    <div class="btn-holder">
+                        <button class="btn" type="submit">Login</button>
+                    </div>    
+                </div>
+            </form>
+        </div>        
+    </div>
+
+    
+   
+</div>
